@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:notizapp/cubit/notes_cubit.dart';
 import 'package:notizapp/view/home.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(const MyApp()),
+    storage: storage,
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(debugShowCheckedModeBanner: false, home: Homepage());
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NotesCubit>(
+          create: ((context) => NotesCubit()),
+        )
+      ],
+      child: const MaterialApp(debugShowCheckedModeBanner: false, home: Homepage()),
+    );
   }
 }
