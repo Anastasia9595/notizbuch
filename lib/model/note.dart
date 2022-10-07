@@ -7,7 +7,13 @@ class Note extends Equatable {
   final DateTime date;
   final bool done;
 
-  const Note({required this.id, required this.title, required this.description, required this.date, this.done = false});
+  const Note({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.date,
+    required this.done,
+  });
 
   Note copyWith({
     int? id,
@@ -15,6 +21,7 @@ class Note extends Equatable {
     String? description,
     DateTime? date,
     bool? done,
+    bool? isChanged,
   }) {
     return Note(
       title: title ?? this.title,

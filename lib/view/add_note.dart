@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/cubit/notes_cubit.dart';
 import 'package:notizapp/view/home.dart';
 
 class AddNote extends StatelessWidget {
   AddNote({super.key});
-
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,8 +21,18 @@ class AddNote extends StatelessWidget {
             if (titleController.text.isNotEmpty && descriptionController.text.isNotEmpty) {
               return IconButton(
                   onPressed: () {
-                    BlocProvider.of<NotesCubit>(context)
-                        .addNoteToList(titleController.text, descriptionController.text);
+                    if (state.isChanged == true) {
+                      BlocProvider.of<NotesCubit>(context).updateNotefromList(
+                        state.autoId,
+                        titleController.text,
+                        descriptionController.text,
+                      );
+
+                      context.read<NotesCubit>().setIsChanged(false);
+                    } else {
+                      BlocProvider.of<NotesCubit>(context)
+                          .addNoteToList(titleController.text, descriptionController.text);
+                    }
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -58,12 +66,12 @@ class AddNote extends StatelessWidget {
             height: 10,
           ),
           TextField(
+            textInputAction: TextInputAction.next,
             controller: titleController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Title',
             ),
-            // textInputAction: TextInputAction.next,
           ),
           const SizedBox(
             height: 10,

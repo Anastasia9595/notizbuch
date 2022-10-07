@@ -1,0 +1,18 @@
+Funktionen:
+    Notiz durch langes drücken bearbeiten
+    Nach rechts wischen => hinzufügen zum Archiv
+    Such funktion
+    Funktion für mehrere Cards löschen einbauen
+    Dark Modus hinzufügen
+    Firebase hinzufügen nachdem alle Lokalen Funktionen funktionieren
+    Upload Funktion in die Cloud einbauen
+    Letzter Schritt => Code Refectoring
+
+Bugs:
+    Popup Card wird nicht angezeigt beim löschen einer Notiz
+        Eventuell Bearbeiten vom Dimisswidget
+
+Pages:
+    Archiv Seite
+    Help Seite
+    Trash Seite

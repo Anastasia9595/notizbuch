@@ -40,13 +40,13 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
     String description,
   ) {
     final Note note = Note(id: id, title: title, description: description, date: DateTime.now(), done: false);
-    final stateList = state.notesList;
-    final int index = stateList.indexWhere(((element) => element.id == id));
-    final newUpdatetState = stateList[index] = note;
+    // final stateList = state.notesList;
+    // final int index = stateList.indexWhere(((element) => element.id == id));
+    // final newUpdatetState = stateList[index] = note;
     // stateList.remove(stateList[index]);
     // stateList.insert(index, note);
     // emit(state.copyWith(notesList: stateList));
-    // emit(state.copyWith(notesList: state.notesList.map((element) => element.id == id ? note : element).toList()));
+    emit(state.copyWith(notesList: state.notesList.map((element) => element.id == id ? note : element).toList()));
   }
 
   void setIsChanged(bool isChanged) {
