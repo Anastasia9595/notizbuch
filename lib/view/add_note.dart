@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,10 +9,17 @@ import 'package:notizapp/view/home.dart';
 
 class AddNote extends StatelessWidget {
   AddNote({super.key});
+
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<NotesCubit>().state;
+    if (state.isChanged) {
+      titleController.text = state.selectedNote!.title;
+      descriptionController.text = state.selectedNote!.description;
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFE9AE),
       appBar: AppBar(
@@ -18,21 +28,23 @@ class AddNote extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.black),
         leading: BlocBuilder<NotesCubit, NotesState>(
           builder: (context, state) {
-            if (titleController.text.isNotEmpty && descriptionController.text.isNotEmpty) {
+            if (titleController.text.isNotEmpty) {
               return IconButton(
                   onPressed: () {
                     if (state.isChanged == true) {
                       BlocProvider.of<NotesCubit>(context).updateNotefromList(
-                        state.autoId,
+                        state.selectedNote!,
                         titleController.text,
                         descriptionController.text,
                       );
-
                       context.read<NotesCubit>().setIsChanged(false);
+
+                      log('${state.selectedNote}');
                     } else {
                       BlocProvider.of<NotesCubit>(context)
                           .addNoteToList(titleController.text, descriptionController.text);
                     }
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

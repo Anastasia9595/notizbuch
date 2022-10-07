@@ -20,75 +20,68 @@ class NoteCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 8, right: 8, top: 12),
       child: SizedBox(
         height: 150,
-        child: InkWell(
-          onTap: () {
-            context.read<NotesCubit>().setIsChanged(true);
-
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: ((BuildContext context) => AddNote())));
-          },
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 33,
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(16)),
-                      child: Column(
-                        children: [
-                          Expanded(
-                              child: Center(
-                            child: Text(
-                              capitalize(WeekDay.values[note.date.weekday - 1].name),
-                              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
-                            ),
-                          )),
-                          Expanded(
-                              child: Center(
-                            child: Text(
-                              '${note.date.day}',
-                              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
-                            ),
-                          )),
-                          Expanded(
-                              child: Center(
-                            child: Text(
-                              capitalize(Month.values[note.date.month - 2].name),
-                              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
-                            ),
-                          )),
-                        ],
-                      ),
-                    )),
-                Expanded(
-                  flex: 66,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 20, left: 10),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 33,
+                  child: Container(
+                    decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(16)),
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: Center(
                           child: Text(
-                            note.title,
-                            style: const TextStyle(fontSize: 30),
+                            capitalize(WeekDay.values[note.date.weekday - 1].name),
+                            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
                           ),
+                        )),
+                        Expanded(
+                            child: Center(
+                          child: Text(
+                            '${note.date.day}',
+                            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                          ),
+                        )),
+                        Expanded(
+                            child: Center(
+                          child: Text(
+                            capitalize(Month.values[note.date.month - 2].name),
+                            style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                          ),
+                        )),
+                      ],
+                    ),
+                  )),
+              Expanded(
+                flex: 66,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 20, left: 10),
+                        child: Text(
+                          note.title,
+                          style: const TextStyle(fontSize: 30),
                         ),
                       ),
-                      Expanded(
-                        flex: 50,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10, left: 10),
-                          child: Text(note.description),
-                        ),
+                    ),
+                    Expanded(
+                      flex: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10, left: 10),
+                        child: Text(note.description),
                       ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),

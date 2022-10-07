@@ -110,8 +110,22 @@ class Homepage extends StatelessWidget {
                           );
                         },
                         children: [
-                          NoteCard(
-                            note: state.notesList[index],
+                          InkWell(
+                            onTap: () {
+                              context.read<NotesCubit>().setNotetoEdit(state.notesList[index]);
+
+                              context.read<NotesCubit>().setIsChanged(true);
+
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddNote(),
+                                ),
+                              );
+                            },
+                            child: NoteCard(
+                              note: state.notesList[index],
+                            ),
                           ),
                         ]);
                   }),

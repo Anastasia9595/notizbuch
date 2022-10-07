@@ -6,7 +6,18 @@ import 'package:notizapp/model/note.dart';
 part 'notes_state.dart';
 
 class NotesCubit extends Cubit<NotesState> with HydratedMixin {
-  NotesCubit() : super(const NotesState(notesList: [], autoId: 0, isChanged: false));
+  NotesCubit()
+      : super(NotesState(
+            notesList: const [],
+            autoId: 0,
+            isChanged: false,
+            selectedNote: Note(
+              id: 0,
+              date: DateTime.now(),
+              done: false,
+              title: '',
+              description: '',
+            )));
 
   void addNoteToList(
     String title,
@@ -34,23 +45,36 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
     );
   }
 
+  // Update Item in List by ID and save it
   void updateNotefromList(
-    int id,
+    Note note,
     String title,
     String description,
   ) {
-    final Note note = Note(id: id, title: title, description: description, date: DateTime.now(), done: false);
-    // final stateList = state.notesList;
-    // final int index = stateList.indexWhere(((element) => element.id == id));
-    // final newUpdatetState = stateList[index] = note;
-    // stateList.remove(stateList[index]);
-    // stateList.insert(index, note);
-    // emit(state.copyWith(notesList: stateList));
-    emit(state.copyWith(notesList: state.notesList.map((element) => element.id == id ? note : element).toList()));
+    Note newNote = note.copyWith(
+      title: title,
+      description: description,
+      date: DateTime.now(),
+    );
+
+    emit(
+      state.copyWith(
+        notesList: state.notesList.map((element) => element.id == note.id ? element = newNote : element).toList(),
+      ),
+    );
   }
 
   void setIsChanged(bool isChanged) {
     emit(state.copyWith(isChanged: isChanged));
+  }
+
+  void setNotetoEdit(Note note) {
+    emit(state.copyWith(selectedNote: note));
+  }
+
+  // clean the note to edit
+  void cleanNotetoEdit(Note note) {
+    emit(state.copyWith(selectedNote: note.copyWith(title: '', description: '')));
   }
 
   @override
