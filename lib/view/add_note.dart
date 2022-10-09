@@ -4,22 +4,36 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notizapp/cubit/notes_cubit.dart';
+
 import 'package:notizapp/view/home.dart';
 
-class AddNote extends StatelessWidget {
-  AddNote({super.key});
+import '../cubit/notes_cubit/notes_cubit.dart';
 
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
+class AddNote extends StatefulWidget {
+  const AddNote({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    final state = context.watch<NotesCubit>().state;
-    if (state.isChanged) {
+  State<AddNote> createState() => _AddNoteState();
+}
+
+class _AddNoteState extends State<AddNote> {
+  final TextEditingController titleController = TextEditingController();
+
+  final TextEditingController descriptionController = TextEditingController();
+  String titleText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    final state = context.read<NotesCubit>().state;
+    if (state.selectedNote != null) {
       titleController.text = state.selectedNote!.title;
       descriptionController.text = state.selectedNote!.description;
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFE9AE),
       appBar: AppBar(
@@ -31,13 +45,12 @@ class AddNote extends StatelessWidget {
             if (titleController.text.isNotEmpty) {
               return IconButton(
                   onPressed: () {
-                    if (state.isChanged == true) {
+                    if (state.selectedNote != null) {
                       BlocProvider.of<NotesCubit>(context).updateNotefromList(
                         state.selectedNote!,
                         titleController.text,
                         descriptionController.text,
                       );
-                      context.read<NotesCubit>().setIsChanged(false);
 
                       log('${state.selectedNote}');
                     } else {
@@ -89,13 +102,16 @@ class AddNote extends StatelessWidget {
             height: 10,
           ),
           Expanded(
-            child: TextField(
-              controller: descriptionController,
-              maxLines: 30,
-              minLines: 30,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Description',
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+              child: TextField(
+                controller: descriptionController,
+                maxLines: 30,
+                minLines: 30,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Description',
+                ),
               ),
             ),
           ),

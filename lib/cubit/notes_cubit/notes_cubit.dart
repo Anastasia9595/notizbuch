@@ -10,7 +10,6 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
       : super(NotesState(
             notesList: const [],
             autoId: 0,
-            isChanged: false,
             selectedNote: Note(
               id: 0,
               date: DateTime.now(),
@@ -57,24 +56,19 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
       date: DateTime.now(),
     );
 
+    List<Note> notesList = state.notesList;
+    final newList = notesList.map((element) => element.id == note.id ? element = newNote : element).toList();
+    newList.sort((a, b) => b.date.compareTo(a.date));
+
     emit(
       state.copyWith(
-        notesList: state.notesList.map((element) => element.id == note.id ? element = newNote : element).toList(),
+        notesList: newList,
       ),
     );
   }
 
-  void setIsChanged(bool isChanged) {
-    emit(state.copyWith(isChanged: isChanged));
-  }
-
   void setNotetoEdit(Note note) {
     emit(state.copyWith(selectedNote: note));
-  }
-
-  // clean the note to edit
-  void cleanNotetoEdit(Note note) {
-    emit(state.copyWith(selectedNote: note.copyWith(title: '', description: '')));
   }
 
   @override

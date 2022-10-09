@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/components/dimissible_card.dart';
 import 'package:notizapp/components/notecard.dart';
 
-import 'package:notizapp/cubit/notes_cubit.dart';
+import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/view/add_note.dart';
 
+import '../components/alertdialog.dart';
 import '../components/navigationdrawer.dart';
 
 class Homepage extends StatelessWidget {
@@ -61,65 +62,35 @@ class Homepage extends StatelessWidget {
                         endToStart: () {
                           showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Confirm'),
-                              content: const Text('Are you sure you wish to delete this item?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('CANCEL'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    context.read<NotesCubit>().removeNotefromList(state.notesList[index].id);
-                                    Navigator.of(context).pop();
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                      content: Text('Notiz erfolgreich gelöscht'),
-                                      duration: Duration(seconds: 1),
-                                    ));
-                                  },
-                                  child: const Text('CONFIRM'),
-                                )
-                              ],
+                            builder: (context) => Alert(
+                              title: 'Notiz löschen',
+                              description: 'Möchtest du die Notiz wirklich löschen?',
+                              onPressed: () {
+                                context.read<NotesCubit>().removeNotefromList(state.notesList[index].id);
+                                Navigator.pop(context);
+                              },
                             ),
                           );
                         },
                         startToEnd: () {
                           showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Confirm'),
-                              content: const Text('Are you sure you wish to archive this item?'),
-                              actions: [
-                                TextButton(
+                              context: context,
+                              builder: (context) => Alert(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('CANCEL'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('CONFIRM'),
-                                )
-                              ],
-                            ),
-                          );
+                                  title: 'Notiz archivieren',
+                                  description: 'Möchtest du die Notiz wirklich archivieren?'));
                         },
                         children: [
                           InkWell(
                             onTap: () {
                               context.read<NotesCubit>().setNotetoEdit(state.notesList[index]);
 
-                              context.read<NotesCubit>().setIsChanged(true);
-
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => AddNote(),
+                                  builder: (context) => const AddNote(),
                                 ),
                               );
                             },

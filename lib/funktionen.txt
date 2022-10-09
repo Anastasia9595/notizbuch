@@ -9,9 +9,7 @@ Funktionen:
     Letzter Schritt => Code Refectoring
 
 Bugs:
-    Popup Card wird nicht angezeigt beim löschen einer Notiz
-        Eventuell Bearbeiten vom Dimisswidget
-
+    Wenn eine Notiz bearbeitet wird soll sich beim zuklappen der Tastatur das Textfield nicht mehr reseten.
 Pages:
     Archiv Seite
     Help Seite
