@@ -20,7 +20,6 @@ class _AddNoteState extends State<AddNote> {
   final TextEditingController titleController = TextEditingController();
 
   final TextEditingController descriptionController = TextEditingController();
-  String titleText = '';
 
   @override
   void initState() {
