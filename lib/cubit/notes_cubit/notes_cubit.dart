@@ -7,16 +7,19 @@ part 'notes_state.dart';
 
 class NotesCubit extends Cubit<NotesState> with HydratedMixin {
   NotesCubit()
-      : super(NotesState(
+      : super(
+          NotesState(
             notesList: const [],
             autoId: 0,
             selectedNote: Note(
               id: 0,
-              date: DateTime.now(),
-              done: false,
               title: '',
               description: '',
-            )));
+              date: DateTime.now(),
+              done: false,
+            ),
+          ),
+        );
 
   void addNoteToList(
     String title,
@@ -73,10 +76,10 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
       state.copyWith(
         selectedNote: Note(
           id: 0,
-          date: DateTime.now(),
-          done: false,
           title: '',
           description: '',
+          date: DateTime.now(),
+          done: false,
         ),
       ),
     );

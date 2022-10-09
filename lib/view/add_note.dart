@@ -43,7 +43,7 @@ class _AddNoteState extends State<AddNote> {
         iconTheme: const IconThemeData(color: Colors.black),
         leading: BlocBuilder<NotesCubit, NotesState>(
           builder: (context, state) {
-            if (titleController.text.isNotEmpty) {
+            if (titleController.text.isNotEmpty && descriptionController.text.isNotEmpty) {
               return IconButton(
                   onPressed: () {
                     if (state.selectedNote!.id != 0 && !titleController.text.contains(state.selectedNote!.title) ||
@@ -54,7 +54,7 @@ class _AddNoteState extends State<AddNote> {
                         descriptionController.text,
                       );
                       context.read<NotesCubit>().cleanSelectedNote();
-                    } else {
+                    } else if (state.selectedNote!.id == 0) {
                       BlocProvider.of<NotesCubit>(context)
                           .addNoteToList(titleController.text, descriptionController.text);
                     }
