@@ -108,7 +108,13 @@ class Homepage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: ((BuildContext context) => AddNote())));
+          context.read<NotesCubit>().cleanSelectedNote();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: ((BuildContext context) => const AddNote()),
+            ),
+          );
         },
         backgroundColor: Colors.amber,
         child: const Icon(

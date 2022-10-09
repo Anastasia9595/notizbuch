@@ -27,6 +27,7 @@ class _AddNoteState extends State<AddNote> {
     super.initState();
     final state = context.read<NotesCubit>().state;
     if (state.selectedNote != null) {
+      log('selectedNote: ${state.selectedNote}');
       titleController.text = state.selectedNote!.title;
       descriptionController.text = state.selectedNote!.description;
     }
@@ -45,19 +46,18 @@ class _AddNoteState extends State<AddNote> {
             if (titleController.text.isNotEmpty) {
               return IconButton(
                   onPressed: () {
-                    if (state.selectedNote != null) {
+                    if (state.selectedNote!.id != 0 && !titleController.text.contains(state.selectedNote!.title) ||
+                        !descriptionController.text.contains(state.selectedNote!.description)) {
                       BlocProvider.of<NotesCubit>(context).updateNotefromList(
                         state.selectedNote!,
                         titleController.text,
                         descriptionController.text,
                       );
-
-                      log('${state.selectedNote}');
+                      context.read<NotesCubit>().cleanSelectedNote();
                     } else {
                       BlocProvider.of<NotesCubit>(context)
                           .addNoteToList(titleController.text, descriptionController.text);
                     }
-
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

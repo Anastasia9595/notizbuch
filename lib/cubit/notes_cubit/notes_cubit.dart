@@ -67,6 +67,21 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
     );
   }
 
+  // clean selected Note
+  void cleanSelectedNote() {
+    emit(
+      state.copyWith(
+        selectedNote: Note(
+          id: 0,
+          date: DateTime.now(),
+          done: false,
+          title: '',
+          description: '',
+        ),
+      ),
+    );
+  }
+
   void setNotetoEdit(Note note) {
     emit(state.copyWith(selectedNote: note));
   }
