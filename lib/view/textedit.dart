@@ -16,8 +16,6 @@ class TextEditPage extends StatefulWidget {
 }
 
 class _TextEditPageState extends State<TextEditPage> {
-  // final _controllerTitle = QuillController.basic();
-  // final _controllerDescription = QuillController.basic();
   q.QuillController titleController = q.QuillController.basic();
   q.QuillController descriptionController = q.QuillController.basic();
 
@@ -81,7 +79,7 @@ class _TextEditPageState extends State<TextEditPage> {
             // Title
             Container(
               alignment: Alignment.center,
-              height: 50,
+              height: 60,
               width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
@@ -90,8 +88,15 @@ class _TextEditPageState extends State<TextEditPage> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(15),
-                child: q.QuillEditor.basic(
+                padding: const EdgeInsets.all(10),
+                child: q.QuillEditor(
+                  scrollController: ScrollController(),
+                  scrollable: true,
+                  focusNode: FocusNode(),
+                  autoFocus: false,
+                  placeholder: 'Add Title...',
+                  expands: true,
+                  padding: EdgeInsets.all(2),
                   controller: titleController,
                   readOnly: false, // true for view only mode
                 ),
@@ -112,8 +117,15 @@ class _TextEditPageState extends State<TextEditPage> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 15, top: 15),
-                  child: q.QuillEditor.basic(
+                  padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
+                  child: q.QuillEditor(
+                    scrollController: ScrollController(),
+                    scrollable: true,
+                    focusNode: FocusNode(),
+                    autoFocus: false,
+                    placeholder: 'Add Description...',
+                    expands: true,
+                    padding: EdgeInsets.only(bottom: 10),
                     controller: descriptionController,
                     readOnly: false, // true for view only mode
                   ),
