@@ -96,7 +96,7 @@ class _TextEditPageState extends State<TextEditPage> {
                   autoFocus: false,
                   placeholder: 'Add Title...',
                   expands: true,
-                  padding: EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(10),
                   controller: titleController,
                   readOnly: false, // true for view only mode
                 ),
