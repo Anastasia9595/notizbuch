@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notizapp/model/note.dart';
 
@@ -13,8 +14,8 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
             autoId: 0,
             selectedNote: Note(
               id: 0,
-              title: '',
-              description: '',
+              title: Delta(),
+              description: Delta(),
               date: DateTime.now(),
               done: false,
             ),
@@ -22,8 +23,8 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
         );
 
   void addNoteToList(
-    String title,
-    String description,
+    Delta title,
+    Delta description,
   ) {
     Note newNote = Note(
       id: state.autoId + 1,
@@ -50,8 +51,8 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
   // Update Item in List by ID and save it
   void updateNotefromList(
     Note note,
-    String title,
-    String description,
+    Delta title,
+    Delta description,
   ) {
     Note newNote = note.copyWith(
       title: title,
@@ -76,8 +77,8 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
       state.copyWith(
         selectedNote: Note(
           id: 0,
-          title: '',
-          description: '',
+          title: Delta(),
+          description: Delta(),
           date: DateTime.now(),
           done: false,
         ),

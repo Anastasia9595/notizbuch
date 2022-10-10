@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class Note extends Equatable {
   final int id;
-  final String title;
-  final String description;
+  final Delta title;
+  final Delta description;
   final DateTime date;
   final bool done;
 
@@ -17,8 +20,8 @@ class Note extends Equatable {
 
   Note copyWith({
     int? id,
-    String? title,
-    String? description,
+    Delta? title,
+    Delta? description,
     DateTime? date,
     bool? done,
     bool? isChanged,
@@ -33,10 +36,10 @@ class Note extends Equatable {
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+    return {
       'id': id,
-      'title': title,
-      'description': description,
+      'title': title.toJson(),
+      'description': description.toJson(),
       'date': date.toIso8601String(),
       'done': done,
     };
@@ -44,11 +47,11 @@ class Note extends Equatable {
 
   factory Note.fromMap(Map<String, dynamic> map) {
     return Note(
-      id: map['id'] as int,
-      title: map['title'] as String,
-      description: map['description'] as String,
+      id: map['id'],
+      title: Delta.fromJson(map['title']),
+      description: Delta.fromJson(map['description']),
       date: DateTime.parse(map['date']),
-      done: map['done'] as bool,
+      done: map['done'],
     );
   }
 

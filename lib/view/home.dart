@@ -5,6 +5,7 @@ import 'package:notizapp/components/notecard.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/view/add_note.dart';
+import 'package:notizapp/view/textedit.dart';
 
 import '../components/alertdialog.dart';
 import '../components/navigationdrawer.dart';
@@ -90,7 +91,7 @@ class Homepage extends StatelessWidget {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const AddNote(),
+                                  builder: (context) => const TextEditPage(),
                                 ),
                               );
                             },
@@ -112,7 +113,7 @@ class Homepage extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: ((BuildContext context) => const AddNote()),
+              builder: ((BuildContext context) => const TextEditPage()),
             ),
           );
         },

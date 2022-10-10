@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
+
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 import '../helpers/constants.dart';
 import '../model/note.dart';
@@ -16,6 +16,14 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    quill.QuillController titleController = quill.QuillController(
+      document: quill.Document.fromDelta(note.title),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
+    quill.QuillController descriptionController = quill.QuillController(
+      document: quill.Document.fromDelta(note.description),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 12),
       child: SizedBox(
@@ -62,12 +70,12 @@ class NoteCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      flex: 50,
+                      flex: 25,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 20, left: 10),
-                        child: Text(
-                          note.title,
-                          style: const TextStyle(fontSize: 30),
+                        child: quill.QuillEditor.basic(
+                          controller: titleController,
+                          readOnly: true, // true for view only mode
                         ),
                       ),
                     ),
@@ -75,7 +83,10 @@ class NoteCard extends StatelessWidget {
                       flex: 50,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10, left: 10),
-                        child: Text(note.description),
+                        child: quill.QuillEditor.basic(
+                          controller: descriptionController,
+                          readOnly: true, // true for view only mode
+                        ),
                       ),
                     ),
                   ],

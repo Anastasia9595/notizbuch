@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 import 'package:notizapp/view/home.dart';
 
@@ -27,8 +28,8 @@ class _AddNoteState extends State<AddNote> {
     final state = context.read<NotesCubit>().state;
     if (state.selectedNote != null) {
       log('selectedNote: ${state.selectedNote}');
-      titleController.text = state.selectedNote!.title;
-      descriptionController.text = state.selectedNote!.description;
+      titleController.text = state.selectedNote!.title.toString();
+      descriptionController.text = state.selectedNote!.description.toString();
     }
   }
 
@@ -44,27 +45,29 @@ class _AddNoteState extends State<AddNote> {
           builder: (context, state) {
             if (titleController.text.isNotEmpty && descriptionController.text.isNotEmpty) {
               return IconButton(
-                  onPressed: () {
-                    if (state.selectedNote!.id != 0 && !titleController.text.contains(state.selectedNote!.title) ||
-                        !descriptionController.text.contains(state.selectedNote!.description)) {
-                      BlocProvider.of<NotesCubit>(context).updateNotefromList(
-                        state.selectedNote!,
-                        titleController.text,
-                        descriptionController.text,
-                      );
-                      context.read<NotesCubit>().cleanSelectedNote();
-                    } else if (state.selectedNote!.id == 0) {
-                      BlocProvider.of<NotesCubit>(context)
-                          .addNoteToList(titleController.text, descriptionController.text);
-                    }
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: ((BuildContext context) => const Homepage()),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.done));
+                onPressed: () {
+                  if (state.selectedNote!.id != 0 &&
+                          !titleController.text.contains(state.selectedNote!.title.toString()) ||
+                      !descriptionController.text.contains(state.selectedNote!.description.toString())) {
+                    // BlocProvider.of<NotesCubit>(context).updateNotefromList(
+                    //   state.selectedNote!,
+                    //   titleController.text,
+                    //   descriptionController.text,
+                    // );
+                    context.read<NotesCubit>().cleanSelectedNote();
+                  } else if (state.selectedNote!.id == 0) {
+                    // BlocProvider.of<NotesCubit>(context)
+                    //     .addNoteToList(titleController.text, descriptionController.text);
+                  }
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((BuildContext context) => const Homepage()),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.done),
+              );
             } else {
               return IconButton(
                 onPressed: () {
