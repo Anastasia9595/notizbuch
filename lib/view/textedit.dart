@@ -1,10 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_quill/flutter_quill.dart' as q;
 
 import 'home.dart';
 
@@ -16,22 +16,22 @@ class TextEditPage extends StatefulWidget {
 }
 
 class _TextEditPageState extends State<TextEditPage> {
-  final _controllerTitle = QuillController.basic();
-  final _controllerDescription = QuillController.basic();
-  QuillController titleController = QuillController.basic();
-  QuillController descriptionController = QuillController.basic();
+  // final _controllerTitle = QuillController.basic();
+  // final _controllerDescription = QuillController.basic();
+  q.QuillController titleController = q.QuillController.basic();
+  q.QuillController descriptionController = q.QuillController.basic();
 
   @override
   void initState() {
     super.initState();
     final state = context.read<NotesCubit>().state;
     if (state.selectedNote!.id != 0) {
-      titleController = quill.QuillController(
-        document: quill.Document.fromDelta(state.selectedNote!.title),
+      titleController = q.QuillController(
+        document: q.Document.fromDelta(state.selectedNote!.title),
         selection: const TextSelection.collapsed(offset: 0),
       );
-      descriptionController = quill.QuillController(
-        document: quill.Document.fromDelta(state.selectedNote!.description),
+      descriptionController = q.QuillController(
+        document: q.Document.fromDelta(state.selectedNote!.description),
         selection: const TextSelection.collapsed(offset: 0),
       );
     }
@@ -39,8 +39,6 @@ class _TextEditPageState extends State<TextEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read<NotesCubit>().state;
-
     return Scaffold(
         backgroundColor: const Color(0xFFFFE9AE),
         appBar: AppBar(
@@ -51,10 +49,14 @@ class _TextEditPageState extends State<TextEditPage> {
             builder: (context, state) {
               return IconButton(
                   onPressed: () {
-                    if (!_controllerTitle.document.isEmpty() && !_controllerDescription.document.isEmpty()) {
-                      BlocProvider.of<NotesCubit>(context).addNoteToList(
-                          _controllerTitle.document.toDelta(), _controllerDescription.document.toDelta());
-                    } else if (state.selectedNote!.id != 0) {
+                    if (state.selectedNote!.id == 0 &&
+                        !titleController.document.isEmpty() &&
+                        !descriptionController.document.isEmpty()) {
+                      BlocProvider.of<NotesCubit>(context)
+                          .addNoteToList(titleController.document.toDelta(), descriptionController.document.toDelta());
+                    } else if (state.selectedNote!.id != 0 &&
+                            titleController.document.toDelta() != state.selectedNote!.title ||
+                        descriptionController.document.toDelta() != state.selectedNote!.description) {
                       BlocProvider.of<NotesCubit>(context).updateNotefromList(
                         state.selectedNote!,
                         titleController.document.toDelta(),
@@ -89,8 +91,8 @@ class _TextEditPageState extends State<TextEditPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(15),
-                child: quill.QuillEditor.basic(
-                  controller: state.selectedNote!.id != 0 ? titleController : _controllerTitle,
+                child: q.QuillEditor.basic(
+                  controller: titleController,
                   readOnly: false, // true for view only mode
                 ),
               ),
@@ -111,22 +113,29 @@ class _TextEditPageState extends State<TextEditPage> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15, top: 15),
-                  child: QuillEditor.basic(
-                    controller: state.selectedNote!.id != 0 ? descriptionController : _controllerDescription,
+                  child: q.QuillEditor.basic(
+                    controller: descriptionController,
                     readOnly: false, // true for view only mode
                   ),
                 ),
               ),
             ),
-            QuillToolbar.basic(
-              controller: state.selectedNote!.id != 0 ? descriptionController : _controllerDescription,
-              showCodeBlock: false,
-              showAlignmentButtons: false,
-              showClearFormat: false,
-              showHeaderStyle: false,
-              showLink: false,
-              showQuote: false,
-            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  q.QuillToolbar.basic(
+                    controller: descriptionController,
+                    showCodeBlock: false,
+                    showAlignmentButtons: false,
+                    showClearFormat: false,
+                    showHeaderStyle: false,
+                    showLink: false,
+                    showQuote: false,
+                  ),
+                ],
+              ),
+            )
           ],
         ));
   }

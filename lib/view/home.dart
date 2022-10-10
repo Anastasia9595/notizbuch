@@ -4,7 +4,7 @@ import 'package:notizapp/components/dimissible_card.dart';
 import 'package:notizapp/components/notecard.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
-import 'package:notizapp/view/add_note.dart';
+
 import 'package:notizapp/view/textedit.dart';
 
 import '../components/alertdialog.dart';

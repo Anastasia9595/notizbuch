@@ -4,7 +4,6 @@ import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 import '../helpers/constants.dart';
 import '../model/note.dart';
-import '../view/add_note.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;
