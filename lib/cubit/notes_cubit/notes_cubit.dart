@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notizapp/model/note.dart';
+import 'package:notizapp/view/textedit.dart';
 
 part 'notes_state.dart';
 
@@ -19,10 +23,11 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
               date: DateTime.now(),
               done: false,
             ),
-            selectNote: false,
+            filteredNotesList: const [],
           ),
         );
 
+  // add note to list
   void addNoteToList(
     Delta title,
     Delta description,
@@ -41,10 +46,12 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
     ));
   }
 
+  // remove note from list
   void removeNotefromList(int id) {
     emit(
       state.copyWith(
         notesList: state.notesList.where((element) => element.id != id).toList(),
+        filteredNotesList: state.filteredNotesList.where((element) => element.id != id).toList(),
       ),
     );
   }
@@ -87,12 +94,18 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
     );
   }
 
+  // set selected Note
   void setNotetoEdit(Note note) {
     emit(state.copyWith(selectedNote: note));
   }
 
-  void setNoteSelet(bool value) {
-    emit(state.copyWith(select: value));
+  // filter notes by name
+  void filterNotes(String name) {
+    List<Note> notesList = state.notesList;
+    List<Note> filteredList =
+        notesList.where((element) => element.title.toString().toLowerCase().contains(name.toLowerCase())).toList();
+
+    emit(state.copyWith(filteredNotesList: filteredList));
   }
 
   @override

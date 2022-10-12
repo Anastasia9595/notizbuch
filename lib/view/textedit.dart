@@ -125,7 +125,7 @@ class _TextEditPageState extends State<TextEditPage> {
                     autoFocus: false,
                     placeholder: 'Add Description...',
                     expands: true,
-                    padding: EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 10),
                     controller: descriptionController,
                     readOnly: false, // true for view only mode
                   ),

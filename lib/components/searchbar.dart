@@ -1,8 +1,13 @@
 // ignore_for_file: sort_child_properties_last
 
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' as m;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
+
+import '../cubit/searchfield_cubit/searchfield_cubit.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({super.key});
@@ -15,6 +20,7 @@ int toggle = 0;
 
 class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMixin {
   AnimationController? _con;
+
   @override
   void initState() {
     super.initState();
@@ -64,7 +70,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                       animation: _con!,
                       builder: (context, widget) {
                         return Transform.rotate(
-                          angle: _con!.value * 2.0 * pi,
+                          angle: _con!.value * 2.0 * m.pi,
                           child: widget,
                         );
                       }),
@@ -82,25 +88,36 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                 child: SizedBox(
                   height: 23,
                   width: 180,
-                  child: TextField(
-                    cursorRadius: const Radius.circular(10),
-                    cursorWidth: 2,
-                    cursorColor: Colors.black,
-                    decoration: InputDecoration(
-                      labelText: 'Search...',
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelStyle: const TextStyle(
-                        color: Color(0xff5b5b5b),
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
+                  child: BlocBuilder<NotesCubit, NotesState>(builder: (context, noteState) {
+                    return BlocBuilder<SearchfieldCubit, SearchfieldState>(
+                      builder: (context, searchState) {
+                        return TextField(
+                          focusNode: searchState.focusNode,
+                          controller: searchState.controller,
+                          cursorRadius: const Radius.circular(10),
+                          cursorWidth: 2,
+                          cursorColor: Colors.black,
+                          decoration: InputDecoration(
+                            labelText: 'Search...',
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            labelStyle: const TextStyle(
+                              color: Color(0xff5b5b5b),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            alignLabelWithHint: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            context.read<NotesCubit>().filterNotes(value);
+                          },
+                        );
+                      },
+                    );
+                  }),
                 ),
               ),
               duration: const Duration(milliseconds: 375),
@@ -108,23 +125,29 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
             Material(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (toggle == 0) {
-                      toggle = 1;
-                      _con!.forward();
-                    } else {
-                      toggle = 0;
-                      _con!.reverse();
-                    }
-                  });
-                },
-                icon: const Icon(
-                  Icons.search,
-                  size: 26,
-                ),
-              ),
+              child: BlocBuilder<SearchfieldCubit, SearchfieldState>(builder: (context, state) {
+                return IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (toggle == 0) {
+                        toggle = 1;
+
+                        _con!.forward();
+                        state.controller.clear();
+                      } else {
+                        toggle = 0;
+                        _con!.reverse();
+                        state.focusNode.unfocus();
+                        state.controller.clear();
+                      }
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.search,
+                    size: 26,
+                  ),
+                );
+              }),
             )
           ],
         ),

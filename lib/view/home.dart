@@ -4,6 +4,7 @@ import 'package:notizapp/components/dimissible_card.dart';
 import 'package:notizapp/components/notecard.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
+import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
 import 'package:notizapp/helpers/constants.dart';
 
 import 'package:notizapp/view/textedit.dart';
@@ -37,72 +38,104 @@ class Homepage extends StatelessWidget {
       drawer: const NavigationDrawer(),
       body: Column(
         children: [
-          BlocBuilder<NotesCubit, NotesState>(
-            builder: (context, state) {
-              return Text(
-                'Alle Notizen (${state.notesList.length})',
-                style: const TextStyle(fontSize: 30),
+          BlocBuilder<SearchfieldCubit, SearchfieldState>(
+            builder: (context, searchfieldState) {
+              return BlocBuilder<NotesCubit, NotesState>(
+                builder: (context, notesState) {
+                  return searchfieldState.focusNode.hasFocus == false || searchfieldState.controller.text.isEmpty
+                      ? Text(
+                          'Alle Notizen (${notesState.notesList.length})',
+                          style: const TextStyle(fontSize: 30),
+                        )
+                      : Text(
+                          'Suchergebnisse (${notesState.filteredNotesList.length})',
+                          style: const TextStyle(fontSize: 30),
+                        );
+                },
               );
             },
           ),
           Expanded(
             child: BlocBuilder<NotesCubit, NotesState>(
-              builder: (context, state) {
-                return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: state.notesList.length,
-                  itemBuilder: ((context, index) {
-                    return DismissibleCard(
-                        key: Key(state.notesList[index].toString()),
-                        endToStart: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => Alert(
-                              title: 'Notiz löschen',
-                              description: 'Möchtest du die Notiz wirklich löschen?',
-                              onPressed: () {
-                                context.read<NotesCubit>().removeNotefromList(state.notesList[index].id);
-                                Navigator.pop(context);
-                              },
+              builder: (context, notesState) {
+                return BlocBuilder<SearchfieldCubit, SearchfieldState>(
+                  builder: (context, searchState) {
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: !searchState.focusNode.hasFocus || searchState.controller.text.isEmpty
+                          ? notesState.notesList.length
+                          : notesState.filteredNotesList.length,
+                      itemBuilder: ((context, index) {
+                        return DismissibleCard(
+                            key: Key(
+                              searchState.controller.text.isEmpty
+                                  ? notesState.notesList[index].toString()
+                                  : notesState.filteredNotesList[index].toString(),
                             ),
-                          );
-                        },
-                        startToEnd: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => Alert(
+                            endToStart: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => Alert(
+                                  title: 'Notiz löschen',
+                                  description: 'Möchtest du die Notiz wirklich löschen?',
                                   onPressed: () {
-                                    Navigator.of(context).pop();
+                                    context.read<NotesCubit>().removeNotefromList(searchState.controller.text.isEmpty
+                                        ? notesState.notesList[index].id
+                                        : notesState.filteredNotesList[index].id);
+                                    Navigator.pop(context);
                                   },
-                                  title: 'Notiz archivieren',
-                                  description: 'Möchtest du die Notiz wirklich archivieren?'));
-                        },
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              context.read<NotesCubit>().setNotetoEdit(state.notesList[index]);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const TextEditPage(),
                                 ),
                               );
                             },
-                            child: Center(
-                              child: NoteCard(
-                                note: state.notesList[index],
+                            startToEnd: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => Alert(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      title: 'Notiz archivieren',
+                                      description: 'Möchtest du die Notiz wirklich archivieren?'));
+                            },
+                            children: [
+                              const SizedBox(
+                                height: 20,
                               ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                        ]);
-                  }),
+                              BlocBuilder<NotesCubit, NotesState>(builder: (context, notesState) {
+                                return BlocBuilder<SearchfieldCubit, SearchfieldState>(
+                                  builder: (context, searchState) {
+                                    return InkWell(
+                                      onTap: () {
+                                        context.read<NotesCubit>().setNotetoEdit(
+                                            searchState.controller.text.isEmpty || !searchState.focusNode.hasFocus
+                                                ? notesState.notesList[index]
+                                                : notesState.filteredNotesList[index]);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const TextEditPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: Center(
+                                        child: NoteCard(
+                                            note: searchState.focusNode.hasFocus == false ||
+                                                    searchState.controller.text.isEmpty
+                                                ? notesState.notesList[index]
+                                                : notesState.filteredNotesList[index]),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ]);
+                      }),
+                    );
+                  },
                 );
               },
             ),
