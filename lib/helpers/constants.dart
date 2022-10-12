@@ -1,3 +1,5 @@
+import 'package:flutter/animation.dart';
+
 enum WeekDay {
   mon,
   di,
@@ -25,3 +27,5 @@ enum Month {
 String capitalize(String name) {
   return '${name[0].toUpperCase()}${name.substring(1).toLowerCase()}';
 }
+
+const kBackgroundColor = Color(0xffFFFFFF);

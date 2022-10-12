@@ -4,11 +4,13 @@ import 'package:notizapp/components/dimissible_card.dart';
 import 'package:notizapp/components/notecard.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
+import 'package:notizapp/helpers/constants.dart';
 
 import 'package:notizapp/view/textedit.dart';
 
 import '../components/alertdialog.dart';
 import '../components/navigationdrawer.dart';
+import '../components/searchbar.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -16,19 +18,13 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.grey.shade200,
+        backgroundColor: Colors.white,
         elevation: 0.0,
         iconTheme: const IconThemeData(color: Colors.black),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-              size: 30,
-            ),
-          ),
+          const SearchBar(),
           IconButton(
             onPressed: () {},
             icon: const Icon(
@@ -40,7 +36,6 @@ class Homepage extends StatelessWidget {
       ),
       drawer: const NavigationDrawer(),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           BlocBuilder<NotesCubit, NotesState>(
             builder: (context, state) {
@@ -84,10 +79,12 @@ class Homepage extends StatelessWidget {
                                   description: 'Möchtest du die Notiz wirklich archivieren?'));
                         },
                         children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
                           InkWell(
                             onTap: () {
                               context.read<NotesCubit>().setNotetoEdit(state.notesList[index]);
-
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -95,9 +92,14 @@ class Homepage extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: NoteCard(
-                              note: state.notesList[index],
+                            child: Center(
+                              child: NoteCard(
+                                note: state.notesList[index],
+                              ),
                             ),
+                          ),
+                          const SizedBox(
+                            height: 20,
                           ),
                         ]);
                   }),

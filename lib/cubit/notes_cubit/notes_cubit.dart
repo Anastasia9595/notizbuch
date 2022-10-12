@@ -19,6 +19,7 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
               date: DateTime.now(),
               done: false,
             ),
+            selectNote: false,
           ),
         );
 
@@ -88,6 +89,10 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
 
   void setNotetoEdit(Note note) {
     emit(state.copyWith(selectedNote: note));
+  }
+
+  void setNoteSelet(bool value) {
+    emit(state.copyWith(select: value));
   }
 
   @override

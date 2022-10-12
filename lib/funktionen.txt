@@ -8,8 +8,7 @@ Funktionen:
     Upload Funktion in die Cloud einbauen
     Letzter Schritt => Code Refectoring
 
-Bugs:
-    Wenn eine Notiz bearbeitet wird soll sich beim zuklappen der Tastatur das Textfield nicht mehr reseten.
+
 Pages:
     Archiv Seite
     Help Seite
