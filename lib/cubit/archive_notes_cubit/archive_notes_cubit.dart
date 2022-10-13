@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
+
 import 'package:notizapp/model/note.dart';
 
 part 'archive_notes_state.dart';

@@ -24,7 +24,7 @@ class _SwitchAnimationState extends State<SwitchAnimation> {
             }
             final isDark = switchInput?.value ?? false;
             context.read<ThemeCubit>().changeTheme(
-                  switchInput?.value == true ? ThemeMode.light : ThemeMode.dark,
+                  switchInput?.value == true ? false : true,
                 );
             switchInput?.change(!isDark);
           },
@@ -45,8 +45,8 @@ class _SwitchAnimationState extends State<SwitchAnimation> {
                 artboard.addController(controller!);
                 switchInput = controller?.findInput('isDark');
 
-                final mode = context.read<ThemeCubit>().state.themeMode;
-                switchInput?.change(mode == ThemeMode.dark);
+                final mode = context.read<ThemeCubit>().state.switchValue;
+                switchInput?.change(mode);
               },
             ),
           ),

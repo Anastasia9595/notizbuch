@@ -44,11 +44,11 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
         width: (toggle == 0) ? 45 : 300,
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: themeState.themeMode == ThemeMode.light ? Colors.amber : Colors.white,
+          color: themeState.switchValue ? Colors.amber : Colors.white,
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: themeState.themeMode == ThemeMode.light ? Colors.white70 : Colors.black54,
+              color: themeState.switchValue ? Colors.white70 : Colors.black54,
               spreadRadius: -10.0,
               blurRadius: 10.0,
               offset: const Offset(0, 10),
@@ -66,9 +66,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                 duration: const Duration(milliseconds: 200),
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  // decoration: const BoxDecoration(color: Color(0xfff2f3f7)),
                   child: AnimatedBuilder(
-                      child: const Icon(Icons.search),
                       animation: _con!,
                       builder: (context, widget) {
                         return Transform.rotate(
@@ -124,9 +122,16 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
               ),
               duration: const Duration(milliseconds: 375),
             ),
-            Material(
-              color: themeState.themeMode == ThemeMode.light ? Colors.white : const Color(0xff282828),
-              borderRadius: BorderRadius.circular(30),
+            Container(
+              decoration: BoxDecoration(
+                color: themeState.switchValue ? Colors.white : const Color(0xff282828),
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  color: themeState.switchValue ? Colors.white : const Color(0xff282828),
+                  width: 2,
+                ),
+              ),
+              //borderRadius: BorderRadius.circular(30),
               child: BlocBuilder<SearchfieldCubit, SearchfieldState>(builder: (context, state) {
                 return IconButton(
                   onPressed: () {
@@ -147,7 +152,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                   },
                   icon: Icon(
                     Icons.search,
-                    color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white,
+                    color: themeState.switchValue ? Colors.black : Colors.white,
                     size: 26,
                   ),
                 );

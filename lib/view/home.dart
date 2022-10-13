@@ -5,7 +5,6 @@ import 'package:notizapp/components/notecard.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
-import 'package:notizapp/helpers/constants.dart';
 
 import 'package:notizapp/view/textedit.dart';
 
@@ -21,11 +20,11 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeState = context.watch<ThemeCubit>().state;
     return Scaffold(
-      backgroundColor: themeState.themeMode == ThemeMode.light ? Colors.white : Color(0xff282828),
+      backgroundColor: themeState.switchValue ? Colors.white : const Color(0xff282828),
       appBar: AppBar(
-        backgroundColor: themeState.themeMode == ThemeMode.light ? Colors.white : Color(0xff282828),
+        backgroundColor: themeState.switchValue ? Colors.white : const Color(0xff282828),
         elevation: 0.0,
-        iconTheme: IconThemeData(color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white),
+        iconTheme: IconThemeData(color: themeState.switchValue ? Colors.black : Colors.white),
         actions: [
           const SearchBar(),
           IconButton(
@@ -47,15 +46,11 @@ class Homepage extends StatelessWidget {
                   return searchfieldState.focusNode.hasFocus == false || searchfieldState.controller.text.isEmpty
                       ? Text(
                           'Alle Notizen (${notesState.notesList.length})',
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white),
+                          style: TextStyle(fontSize: 30, color: themeState.switchValue ? Colors.black : Colors.white),
                         )
                       : Text(
                           'Suchergebnisse (${notesState.filteredNotesList.length})',
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white),
+                          style: TextStyle(fontSize: 30, color: themeState.switchValue ? Colors.black : Colors.white),
                         );
                 },
               );

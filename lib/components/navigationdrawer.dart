@@ -13,8 +13,9 @@ class NavigationDrawer extends StatefulWidget {
 class _NavigationDrawerState extends State<NavigationDrawer> {
   @override
   Widget build(BuildContext context) {
+    final themeState = context.watch<ThemeCubit>().state;
     return Drawer(
-      backgroundColor: const Color(0xFFA88C7E),
+      backgroundColor: themeState.switchValue ? const Color(0xFFA88C7E) : const Color(0xff372E29),
       child: SingleChildScrollView(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -76,16 +77,16 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           ),
           BlocBuilder<ThemeCubit, ThemeState>(
             builder: (context, state) {
-              return const ListTile(
+              return ListTile(
                   leading: Icon(
-                    Icons.dark_mode,
+                    state.switchValue ? Icons.dark_mode : Icons.wb_sunny,
                     color: Colors.white,
                   ),
                   title: Text(
-                    'Dark Mode',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    state.switchValue ? 'Dark Mode' : 'Light Mode',
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
                   ),
-                  trailing: SwitchAnimation());
+                  trailing: const SwitchAnimation());
             },
           ),
         ],
