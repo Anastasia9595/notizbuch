@@ -10,6 +10,7 @@ class SearchfieldCubit extends Cubit<SearchfieldState> {
           SearchfieldState(
             controller: TextEditingController(),
             focusNode: FocusNode(),
+            con: null,
           ),
         );
 }

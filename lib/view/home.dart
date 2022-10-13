@@ -69,7 +69,7 @@ class Homepage extends StatelessWidget {
                       itemBuilder: ((context, index) {
                         return DismissibleCard(
                             key: Key(
-                              searchState.controller.text.isEmpty
+                              searchState.controller.text.isEmpty || !searchState.focusNode.hasFocus
                                   ? notesState.notesList[index].toString()
                                   : notesState.filteredNotesList[index].toString(),
                             ),
@@ -111,6 +111,9 @@ class Homepage extends StatelessWidget {
                                             searchState.controller.text.isEmpty || !searchState.focusNode.hasFocus
                                                 ? notesState.notesList[index]
                                                 : notesState.filteredNotesList[index]);
+
+                                        searchState.controller.clear();
+                                        searchState.focusNode.unfocus();
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -142,21 +145,27 @@ class Homepage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.read<NotesCubit>().cleanSelectedNote();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: ((BuildContext context) => const TextEditPage()),
+      floatingActionButton: BlocBuilder<SearchfieldCubit, SearchfieldState>(
+        builder: (context, state) {
+          return FloatingActionButton(
+            onPressed: () {
+              context.read<NotesCubit>().cleanSelectedNote();
+              state.controller.clear();
+              state.focusNode.unfocus();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: ((BuildContext context) => const TextEditPage()),
+                ),
+              );
+            },
+            backgroundColor: Colors.amber,
+            child: const Icon(
+              Icons.add,
+              color: Colors.black,
             ),
           );
         },
-        backgroundColor: Colors.amber,
-        child: const Icon(
-          Icons.add,
-          color: Colors.black,
-        ),
       ),
     );
   }

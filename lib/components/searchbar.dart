@@ -137,6 +137,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                       } else {
                         toggle = 0;
                         _con!.reverse();
+                        context.read<NotesCubit>().resetList();
                         state.focusNode.unfocus();
                         state.controller.clear();
                       }
