@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 
+import '../cubit/theme_cubit/theme_cubit.dart';
 import '../helpers/constants.dart';
 import '../model/note.dart';
 import '../view/textedit.dart';
@@ -20,9 +21,6 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Offset distance = isPressed ? const Offset(10, 10) : const Offset(28, 28);
-    double blur = isPressed ? 5 : 30;
-
     quill.QuillController titleController = quill.QuillController(
       document: quill.Document.fromDelta(note.title),
       selection: const TextSelection.collapsed(offset: 0),
@@ -31,6 +29,8 @@ class NoteCard extends StatelessWidget {
       document: quill.Document.fromDelta(note.description),
       selection: const TextSelection.collapsed(offset: 0),
     );
+
+    final themeState = context.watch<ThemeCubit>().state;
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 12),
       child: SizedBox(
@@ -40,7 +40,7 @@ class NoteCard extends StatelessWidget {
           builder: (context, state) {
             return Container(
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.3),
+                color: themeState.switchValue ? Colors.white.withOpacity(0.3) : Colors.white,
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
@@ -49,11 +49,11 @@ class NoteCard extends StatelessWidget {
                     spreadRadius: 1,
                     offset: const Offset(2, 2),
                   ),
-                  const BoxShadow(
-                    color: Colors.white,
+                  BoxShadow(
+                    color: themeState.switchValue ? Colors.white : Colors.black,
                     blurRadius: 8,
                     spreadRadius: 1,
-                    offset: Offset(-2, -2),
+                    offset: const Offset(-2, -2),
                   ),
                 ],
               ),
@@ -75,21 +75,30 @@ class NoteCard extends StatelessWidget {
                                 child: Center(
                               child: Text(
                                 capitalize(WeekDay.values[note.date.weekday - 1].name),
-                                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                                style: const TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             )),
                             Expanded(
                                 child: Center(
                               child: Text(
                                 '${note.date.day}',
-                                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                                style: const TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             )),
                             Expanded(
                                 child: Center(
                               child: Text(
                                 capitalize(Month.values[note.date.month - 2].name),
-                                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w500),
+                                style: const TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             )),
                           ],

@@ -1,14 +1,14 @@
 part of 'theme_cubit.dart';
 
 class ThemeState extends Equatable {
-  final ThemeMode themeMode;
+  final bool switchValue;
 
-  const ThemeState({required this.themeMode});
+  const ThemeState({required this.switchValue});
 
-  ThemeState copyWith({ThemeMode? themeMode}) {
-    return ThemeState(themeMode: themeMode ?? this.themeMode);
+  ThemeState copyWith({bool? switchValue}) {
+    return ThemeState(switchValue: switchValue ?? this.switchValue);
   }
 
   @override
-  List<Object?> get props => [themeMode];
+  List<Object?> get props => [switchValue];
 }
