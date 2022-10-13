@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notizapp/animation/switch.dart';
+import 'package:notizapp/cubit/theme_cubit/theme_cubit.dart';
 
 class NavigationDrawer extends StatefulWidget {
   const NavigationDrawer({super.key});
@@ -8,7 +11,6 @@ class NavigationDrawer extends StatefulWidget {
 }
 
 class _NavigationDrawerState extends State<NavigationDrawer> {
-  bool light = true;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -72,23 +74,19 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
             ),
             onTap: () {},
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.dark_mode,
-              color: Colors.white,
-            ),
-            title: const Text(
-              'Dark Mode',
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            trailing: Switch(
-                value: light,
-                activeColor: Colors.amber,
-                onChanged: (value) {
-                  setState(() {
-                    light = value;
-                  });
-                }),
+          BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, state) {
+              return const ListTile(
+                  leading: Icon(
+                    Icons.dark_mode,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    'Dark Mode',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                  trailing: SwitchAnimation());
+            },
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
+import 'package:notizapp/cubit/theme_cubit/theme_cubit.dart';
 import 'package:notizapp/view/home.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -32,8 +33,13 @@ class MyApp extends StatelessWidget {
         BlocProvider<SearchfieldCubit>(
           create: ((context) => SearchfieldCubit()),
         ),
+        BlocProvider<ThemeCubit>(
+          create: ((context) => ThemeCubit()),
+        ),
       ],
-      child: const MaterialApp(debugShowCheckedModeBanner: false, home: Homepage()),
+      child: Builder(builder: (context) {
+        return MaterialApp(debugShowCheckedModeBanner: false, home: const Homepage());
+      }),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 
 import '../cubit/searchfield_cubit/searchfield_cubit.dart';
+import '../cubit/theme_cubit/theme_cubit.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({super.key});
@@ -32,6 +33,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    final themeState = context.watch<ThemeCubit>().state;
     return Container(
       height: 80,
       width: 270,
@@ -42,14 +44,14 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
         width: (toggle == 0) ? 45 : 300,
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: Colors.amber,
+          color: themeState.themeMode == ThemeMode.light ? Colors.amber : Colors.white,
           borderRadius: BorderRadius.circular(30),
-          boxShadow: const [
+          boxShadow: [
             BoxShadow(
-              color: Colors.white70,
+              color: themeState.themeMode == ThemeMode.light ? Colors.white70 : Colors.black54,
               spreadRadius: -10.0,
               blurRadius: 10.0,
-              offset: Offset(0, 10),
+              offset: const Offset(0, 10),
             ),
           ],
         ),
@@ -123,7 +125,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
               duration: const Duration(milliseconds: 375),
             ),
             Material(
-              color: Colors.white,
+              color: themeState.themeMode == ThemeMode.light ? Colors.white : const Color(0xff282828),
               borderRadius: BorderRadius.circular(30),
               child: BlocBuilder<SearchfieldCubit, SearchfieldState>(builder: (context, state) {
                 return IconButton(
@@ -143,8 +145,9 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                       }
                     });
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.search,
+                    color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white,
                     size: 26,
                   ),
                 );

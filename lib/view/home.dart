@@ -11,19 +11,21 @@ import 'package:notizapp/view/textedit.dart';
 
 import '../components/alertdialog.dart';
 import '../components/navigationdrawer.dart';
-import '../components/searchbar.dart';
+import '../animation/searchbar.dart';
+import '../cubit/theme_cubit/theme_cubit.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeState = context.watch<ThemeCubit>().state;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeState.themeMode == ThemeMode.light ? Colors.white : Color(0xff282828),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: themeState.themeMode == ThemeMode.light ? Colors.white : Color(0xff282828),
         elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white),
         actions: [
           const SearchBar(),
           IconButton(
@@ -45,11 +47,15 @@ class Homepage extends StatelessWidget {
                   return searchfieldState.focusNode.hasFocus == false || searchfieldState.controller.text.isEmpty
                       ? Text(
                           'Alle Notizen (${notesState.notesList.length})',
-                          style: const TextStyle(fontSize: 30),
+                          style: TextStyle(
+                              fontSize: 30,
+                              color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white),
                         )
                       : Text(
                           'Suchergebnisse (${notesState.filteredNotesList.length})',
-                          style: const TextStyle(fontSize: 30),
+                          style: TextStyle(
+                              fontSize: 30,
+                              color: themeState.themeMode == ThemeMode.light ? Colors.black : Colors.white),
                         );
                 },
               );
@@ -80,9 +86,10 @@ class Homepage extends StatelessWidget {
                                   title: 'Notiz löschen',
                                   description: 'Möchtest du die Notiz wirklich löschen?',
                                   onPressed: () {
-                                    context.read<NotesCubit>().removeNotefromList(searchState.controller.text.isEmpty
-                                        ? notesState.notesList[index].id
-                                        : notesState.filteredNotesList[index].id);
+                                    context.read<NotesCubit>().removeNotefromList(
+                                        searchState.controller.text.isEmpty || !searchState.focusNode.hasFocus
+                                            ? notesState.notesList[index].id
+                                            : notesState.filteredNotesList[index].id);
                                     Navigator.pop(context);
                                   },
                                 ),
