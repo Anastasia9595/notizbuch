@@ -39,7 +39,7 @@ class Archive extends StatelessWidget {
       body: Column(
         children: const [
           Text(
-            'Archive',
+            'Archives',
             style: TextStyle(fontSize: 30),
           ),
         ],
