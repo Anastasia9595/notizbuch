@@ -18,6 +18,7 @@ dependencies:
   hydrated_bloc: ^8.1.0
   path_provider: ^2.0.11
   rive: ^0.9.1
+  tuple: ^2.0.1
 
 dev_dependencies:
   flutter_lints: ^2.0.0

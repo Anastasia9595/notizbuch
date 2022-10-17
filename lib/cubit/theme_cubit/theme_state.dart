@@ -11,4 +11,18 @@ class ThemeState extends Equatable {
 
   @override
   List<Object?> get props => [switchValue];
+
+  //to map
+  Map<String, dynamic> toMap() {
+    return {
+      'switchValue': switchValue,
+    };
+  }
+
+  //from map
+  factory ThemeState.fromMap(Map<String, dynamic> map) {
+    return ThemeState(
+      switchValue: map['switchValue'] as bool,
+    );
+  }
 }

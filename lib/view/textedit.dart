@@ -1,11 +1,13 @@
-import 'dart:developer';
+import 'package:tuple/tuple.dart';
 
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:flutter_quill/flutter_quill.dart' as q;
 
+import '../cubit/theme_cubit/theme_cubit.dart';
 import 'home.dart';
 
 class TextEditPage extends StatefulWidget {
@@ -37,10 +39,11 @@ class _TextEditPageState extends State<TextEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeState = context.watch<ThemeCubit>().state.switchValue;
     return Scaffold(
-        backgroundColor: const Color(0xFFFFE9AE),
+        backgroundColor: themeState ? const Color(0xFFFFE9AE) : const Color(0xFF282828),
         appBar: AppBar(
-          backgroundColor: const Color(0xFFFFE9AE),
+          backgroundColor: themeState ? const Color(0xFFFFE9AE) : const Color(0xFF282828),
           iconTheme: const IconThemeData(color: Colors.black),
           elevation: 0.0,
           leading: BlocBuilder<NotesCubit, NotesState>(
@@ -68,8 +71,9 @@ class _TextEditPageState extends State<TextEditPage> {
                       ),
                     );
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back,
+                    color: themeState ? Colors.black : Colors.white,
                   ));
             },
           ),
@@ -79,16 +83,18 @@ class _TextEditPageState extends State<TextEditPage> {
             // Title
             Container(
               alignment: Alignment.center,
-              height: 60,
+              height: 50,
               width: MediaQuery.of(context).size.width * 0.9,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.black),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
+                border: Border(
+                  bottom: BorderSide(
+                    color: themeState ? Colors.black26 : Colors.white,
+                    width: 0.5,
+                  ),
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(top: 25, bottom: 0),
                 child: q.QuillEditor(
                   scrollController: ScrollController(),
                   scrollable: true,
@@ -96,9 +102,20 @@ class _TextEditPageState extends State<TextEditPage> {
                   autoFocus: false,
                   placeholder: 'Add Title...',
                   expands: true,
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.only(top: 0),
                   controller: titleController,
-                  readOnly: false, // true for view only mode
+                  readOnly: false,
+                  customStyles: DefaultStyles(
+                      paragraph: DefaultTextBlockStyle(
+                          TextStyle(
+                              color: themeState ? Colors.black : Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                          const Tuple2(0, 0),
+                          const Tuple2(0, 0),
+                          null),
+                      placeHolder: DefaultTextBlockStyle(const TextStyle(color: Colors.grey, fontSize: 20),
+                          const Tuple2(0, 0), const Tuple2(0, 0), null)), // true for view only mode
                 ),
               ),
             ),
@@ -108,27 +125,26 @@ class _TextEditPageState extends State<TextEditPage> {
 
             // Description
             Expanded(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, top: 15, right: 15),
-                  child: q.QuillEditor(
-                    scrollController: ScrollController(),
-                    scrollable: true,
-                    focusNode: FocusNode(),
-                    autoFocus: false,
-                    placeholder: 'Add Description...',
-                    expands: true,
-                    padding: const EdgeInsets.only(bottom: 10),
-                    controller: descriptionController,
-                    readOnly: false, // true for view only mode
-                  ),
+                child: q.QuillEditor(
+                  showCursor: true,
+                  scrollController: ScrollController(),
+                  scrollable: true,
+                  focusNode: FocusNode(),
+                  autoFocus: false,
+                  placeholder: 'Add Description...',
+                  expands: true,
+                  padding: const EdgeInsets.only(bottom: 10, left: 4, right: 4, top: 15),
+                  controller: descriptionController,
+                  readOnly: false,
+                  customStyles: DefaultStyles(
+                      paragraph: DefaultTextBlockStyle(TextStyle(color: themeState ? Colors.black : Colors.white),
+                          const Tuple2(0, 8), const Tuple2(0, 0), null),
+                      placeHolder: DefaultTextBlockStyle(const TextStyle(color: Colors.grey, fontSize: 16),
+                          const Tuple2(0, 0), const Tuple2(0, 0), null)),
+
+                  // true for view only mode
                 ),
               ),
             ),
@@ -137,7 +153,17 @@ class _TextEditPageState extends State<TextEditPage> {
               child: Row(
                 children: [
                   q.QuillToolbar.basic(
+                    iconTheme: QuillIconTheme(
+                      iconUnselectedFillColor: Colors.transparent,
+                      iconUnselectedColor: themeState ? Colors.black : Colors.white,
+                      iconSelectedColor: themeState ? Colors.deepOrange : Colors.amber,
+                      iconSelectedFillColor: Colors.transparent,
+                      disabledIconColor: themeState ? Colors.black : Colors.white,
+                    ),
                     controller: descriptionController,
+                    toolbarSectionSpacing: 3,
+                    showFontFamily: false,
+                    showFontSize: false,
                     showCodeBlock: false,
                     showAlignmentButtons: false,
                     showClearFormat: false,
