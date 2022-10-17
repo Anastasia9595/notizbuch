@@ -16,10 +16,11 @@ class ArchiveNotesCubit extends Cubit<ArchiveNotesState> {
     );
   }
 
-  void removeNotefromArchiveList(Note note) {
+  // remove note from list
+  void removeNotefromArchiveList(int id) {
     emit(
       state.copyWith(
-        archiveNotes: state.archiveNotes.where((element) => element.id != note.id).toList(),
+        archiveNotes: state.archiveNotes.where((element) => element.id != id).toList(),
       ),
     );
   }

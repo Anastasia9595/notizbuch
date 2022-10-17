@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:notizapp/components/notecard.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
+
 import 'package:notizapp/view/home.dart';
+
+import '../components/alertdialog.dart';
+import '../components/dimissible_card.dart';
+import '../components/notecard.dart';
+import '../cubit/notes_cubit/notes_cubit.dart';
 
 class Archive extends StatelessWidget {
   const Archive({super.key});
@@ -37,11 +44,61 @@ class Archive extends StatelessWidget {
         ],
       ),
       body: Column(
-        children: const [
-          Text(
-            'Archives',
-            style: TextStyle(fontSize: 30),
+        children: [
+          BlocBuilder<ArchiveNotesCubit, ArchiveNotesState>(
+            builder: (context, state) {
+              return Text(
+                'Archivierte Notizen (${state.archiveNotes.length})',
+                style: TextStyle(fontSize: 30),
+              );
+            },
           ),
+          BlocBuilder<ArchiveNotesCubit, ArchiveNotesState>(
+            builder: (context, state) {
+              return Expanded(
+                child: ListView.builder(
+                    itemCount: state.archiveNotes.length,
+                    itemBuilder: ((context, index) {
+                      return DismissibleCard(
+                          key: Key(
+                            state.archiveNotes[index].id.toString(),
+                          ),
+                          endToStart: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Alert(
+                                title: 'Notiz löschen',
+                                description: 'Möchtest du die Notiz wirklich löschen?',
+                                onPressed: () {
+                                  context
+                                      .read<ArchiveNotesCubit>()
+                                      .removeNotefromArchiveList(state.archiveNotes[index].id);
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            );
+                          },
+                          startToEnd: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => Alert(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    title: 'Notiz archivieren',
+                                    description: 'Möchtest du die Notiz wirklich archivieren?'));
+                          },
+                          children: [
+                            Center(
+                              child: NoteCard(
+                                note: state.archiveNotes[index],
+                              ),
+                            ),
+                          ]);
+                    })),
+              );
+            },
+          )
         ],
       ),
     );

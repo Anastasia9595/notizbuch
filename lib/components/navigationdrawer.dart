@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/animation/switch.dart';
 import 'package:notizapp/cubit/theme_cubit/theme_cubit.dart';
+import 'package:notizapp/view/archive.dart';
 
 class NavigationDrawer extends StatefulWidget {
   const NavigationDrawer({super.key});
@@ -51,7 +52,12 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
               'Archive',
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const Archive()),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(

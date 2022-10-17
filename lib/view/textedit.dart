@@ -1,9 +1,10 @@
+import 'package:notizapp/helpers/constants.dart';
 import 'package:tuple/tuple.dart';
 
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:flutter_quill/flutter_quill.dart' as q;
 
@@ -40,6 +41,7 @@ class _TextEditPageState extends State<TextEditPage> {
   @override
   Widget build(BuildContext context) {
     final themeState = context.watch<ThemeCubit>().state.switchValue;
+
     return Scaffold(
         backgroundColor: themeState ? const Color(0xFFFFE9AE) : const Color(0xFF282828),
         appBar: AppBar(
@@ -105,8 +107,8 @@ class _TextEditPageState extends State<TextEditPage> {
                   padding: const EdgeInsets.only(top: 0),
                   controller: titleController,
                   readOnly: false,
-                  customStyles: DefaultStyles(
-                      paragraph: DefaultTextBlockStyle(
+                  customStyles: q.DefaultStyles(
+                      paragraph: q.DefaultTextBlockStyle(
                           TextStyle(
                               color: themeState ? Colors.black : Colors.white,
                               fontSize: 20,
@@ -114,13 +116,25 @@ class _TextEditPageState extends State<TextEditPage> {
                           const Tuple2(0, 0),
                           const Tuple2(0, 0),
                           null),
-                      placeHolder: DefaultTextBlockStyle(const TextStyle(color: Colors.grey, fontSize: 20),
+                      placeHolder: q.DefaultTextBlockStyle(const TextStyle(color: Colors.grey, fontSize: 20),
                           const Tuple2(0, 0), const Tuple2(0, 0), null)), // true for view only mode
                 ),
               ),
             ),
             const SizedBox(
               height: 10,
+            ),
+            BlocBuilder<NotesCubit, NotesState>(
+              builder: (context, state) {
+                return Container(
+                    padding: const EdgeInsets.all(4),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      state.selectedNote?.id == 0 ? date() : dateToString(state.selectedNote?.date ?? DateTime.now()),
+                      style: const TextStyle(color: Colors.grey),
+                    ));
+              },
             ),
 
             // Description
@@ -138,10 +152,10 @@ class _TextEditPageState extends State<TextEditPage> {
                   padding: const EdgeInsets.only(bottom: 10, left: 4, right: 4, top: 15),
                   controller: descriptionController,
                   readOnly: false,
-                  customStyles: DefaultStyles(
-                      paragraph: DefaultTextBlockStyle(TextStyle(color: themeState ? Colors.black : Colors.white),
+                  customStyles: q.DefaultStyles(
+                      paragraph: q.DefaultTextBlockStyle(TextStyle(color: themeState ? Colors.black : Colors.white),
                           const Tuple2(0, 8), const Tuple2(0, 0), null),
-                      placeHolder: DefaultTextBlockStyle(const TextStyle(color: Colors.grey, fontSize: 16),
+                      placeHolder: q.DefaultTextBlockStyle(const TextStyle(color: Colors.grey, fontSize: 16),
                           const Tuple2(0, 0), const Tuple2(0, 0), null)),
 
                   // true for view only mode
@@ -153,7 +167,7 @@ class _TextEditPageState extends State<TextEditPage> {
               child: Row(
                 children: [
                   q.QuillToolbar.basic(
-                    iconTheme: QuillIconTheme(
+                    iconTheme: q.QuillIconTheme(
                       iconUnselectedFillColor: Colors.transparent,
                       iconUnselectedColor: themeState ? Colors.black : Colors.white,
                       iconSelectedColor: themeState ? Colors.deepOrange : Colors.amber,

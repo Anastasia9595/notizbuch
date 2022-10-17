@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/components/dimissible_card.dart';
 import 'package:notizapp/components/notecard.dart';
+import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
@@ -95,6 +96,10 @@ class Homepage extends StatelessWidget {
                                   context: context,
                                   builder: (context) => Alert(
                                       onPressed: () {
+                                        context
+                                            .read<ArchiveNotesCubit>()
+                                            .addNoteToArchiveList(notesState.notesList[index]);
+                                        context.read<NotesCubit>().removeNotefromList(notesState.notesList[index].id);
                                         Navigator.of(context).pop();
                                       },
                                       title: 'Notiz archivieren',

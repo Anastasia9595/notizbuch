@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
@@ -36,9 +37,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: ((context) => ThemeCubit()),
         ),
+        BlocProvider<ArchiveNotesCubit>(
+          create: ((context) => ArchiveNotesCubit()),
+        ),
       ],
       child: Builder(builder: (context) {
-        return MaterialApp(debugShowCheckedModeBanner: false, home: const Homepage());
+        return const MaterialApp(debugShowCheckedModeBanner: false, home: Homepage());
       }),
     );
   }
