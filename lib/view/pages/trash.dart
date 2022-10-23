@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
 
-import 'package:notizapp/view/home.dart';
+import 'package:notizapp/view/pages/home.dart';
 
-import '../components/alertdialog.dart';
-import '../components/dimissible_card.dart';
-import '../components/notecard.dart';
-import '../cubit/notes_cubit/notes_cubit.dart';
+import '../../components/alertdialog.dart';
+import '../../components/dimissible_card.dart';
+import '../../components/notecard.dart';
+import '../../cubit/theme_cubit/theme_cubit.dart';
 
-class Archive extends StatelessWidget {
-  const Archive({super.key});
+class Trash extends StatelessWidget {
+  const Trash({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeState = context.watch<ThemeCubit>().state;
+
     return Scaffold(
+      backgroundColor: themeState.switchValue ? Colors.white : const Color(0xff282828),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -30,9 +33,9 @@ class Archive extends StatelessWidget {
             size: 30,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: themeState.switchValue ? Colors.white : const Color(0xff282828),
         elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: themeState.switchValue ? Colors.black : Colors.white),
         actions: [
           IconButton(
             onPressed: () {},
@@ -49,7 +52,7 @@ class Archive extends StatelessWidget {
             builder: (context, state) {
               return Text(
                 'Archivierte Notizen (${state.archiveNotes.length})',
-                style: TextStyle(fontSize: 30),
+                style: TextStyle(fontSize: 30, color: themeState.switchValue ? Colors.black : Colors.white),
               );
             },
           ),
@@ -63,6 +66,7 @@ class Archive extends StatelessWidget {
                           key: Key(
                             state.archiveNotes[index].id.toString(),
                           ),
+                          isDragging: false,
                           endToStart: () {
                             showDialog(
                               context: context,

@@ -6,11 +6,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:notizapp/components/notecard.dart';
 
 class DismissibleCard extends StatelessWidget {
-  const DismissibleCard({
+  DismissibleCard({
     Key? key,
     required this.endToStart,
     required this.startToEnd,
     required this.children,
+    required this.isDragging,
     this.dir,
   }) : super(key: key);
 
@@ -26,12 +27,16 @@ class DismissibleCard extends StatelessWidget {
   /// Change direction
   final DismissDirection? dir;
 
+  /// bool that determines if the widget is currently being dragged one way or both
+  bool isDragging = false;
+
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       background: buildSwipeLeftAction(),
       secondaryBackground: buildSwipeRightAction(),
       key: key!,
+      direction: isDragging ? DismissDirection.horizontal : DismissDirection.endToStart,
       confirmDismiss: (dir) => Future.delayed(
         const Duration(milliseconds: 100),
         () {

@@ -6,6 +6,7 @@ import 'dart:math' as m;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
+import 'package:notizapp/helpers/constants.dart';
 
 import '../cubit/searchfield_cubit/searchfield_cubit.dart';
 import '../cubit/theme_cubit/theme_cubit.dart';
@@ -35,13 +36,12 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     final themeState = context.watch<ThemeCubit>().state;
     return Container(
-      height: 80,
-      width: 270,
-      alignment: const Alignment(0.9, 0.0),
+      width: MediaQuery.of(context).size.width * 0.7,
+      alignment: Alignment.centerLeft,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 270),
-        height: 48.0,
-        width: (toggle == 0) ? 45 : 300,
+        height: 45.0,
+        width: (toggle == 0) ? 45 : MediaQuery.of(context).size.width * 0.8,
         curve: Curves.easeOut,
         decoration: BoxDecoration(
           color: themeState.switchValue ? Colors.amber : Colors.white,
@@ -83,11 +83,11 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
               top: 13,
               curve: Curves.easeOut,
               child: AnimatedOpacity(
-                opacity: toggle == 0 ? 0 : 1,
+                opacity: toggle == 0 ? 0 : 0.5,
                 duration: const Duration(milliseconds: 200),
                 child: SizedBox(
-                  height: 23,
-                  width: 180,
+                  height: 20,
+                  width: 190,
                   child: BlocBuilder<NotesCubit, NotesState>(builder: (context, noteState) {
                     return BlocBuilder<SearchfieldCubit, SearchfieldState>(
                       builder: (context, searchState) {
@@ -123,12 +123,13 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
               duration: const Duration(milliseconds: 375),
             ),
             Container(
+              width: 45,
               decoration: BoxDecoration(
-                color: themeState.switchValue ? Colors.white : const Color(0xff282828),
+                color: themeState.switchValue ? kBackgroundColorLight : Colors.amber,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
-                  color: themeState.switchValue ? Colors.white : const Color(0xff282828),
-                  width: 2,
+                  color: themeState.switchValue ? kBackgroundColorLight : kBackgroundColorDark,
+                  width: 1.5,
                 ),
               ),
               //borderRadius: BorderRadius.circular(30),
@@ -152,7 +153,7 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
                   },
                   icon: Icon(
                     Icons.search,
-                    color: themeState.switchValue ? Colors.black : Colors.white,
+                    color: themeState.switchValue ? Colors.black : Colors.black,
                     size: 26,
                   ),
                 );

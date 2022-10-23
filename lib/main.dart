@@ -6,8 +6,14 @@ import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
 import 'package:notizapp/cubit/theme_cubit/theme_cubit.dart';
-import 'package:notizapp/view/home.dart';
+import 'package:notizapp/view/pages/all_notes.dart';
+
+import 'package:notizapp/view/screens/responsive_layout.dart';
+import 'package:notizapp/view/screens/responsive_screens/desktop_screen.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'view/screens/responsive_screens/mobile_screen.dart';
+import 'view/screens/responsive_screens/tablet_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,11 +44,15 @@ class MyApp extends StatelessWidget {
           create: ((context) => ThemeCubit()),
         ),
         BlocProvider<ArchiveNotesCubit>(
+          lazy: false,
           create: ((context) => ArchiveNotesCubit()),
         ),
       ],
       child: Builder(builder: (context) {
-        return const MaterialApp(debugShowCheckedModeBanner: false, home: Homepage());
+        return const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: AllNotesPage(),
+        );
       }),
     );
   }

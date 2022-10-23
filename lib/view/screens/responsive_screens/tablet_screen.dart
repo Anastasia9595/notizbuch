@@ -1,62 +1,55 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notizapp/components/dimissible_card.dart';
-import 'package:notizapp/components/notecard.dart';
-import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
 
-import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
-import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:notizapp/components/header.dart';
 
-import 'package:notizapp/view/textedit.dart';
+import '../../../animation/searchbar.dart';
+import '../../../components/alertdialog.dart';
+import '../../../components/dimissible_card.dart';
+import '../../../components/navigationdrawer.dart';
+import '../../../components/notecard.dart';
+import '../../../cubit/archive_notes_cubit/archive_notes_cubit.dart';
+import '../../../cubit/notes_cubit/notes_cubit.dart';
+import '../../../cubit/searchfield_cubit/searchfield_cubit.dart';
+import '../../../cubit/theme_cubit/theme_cubit.dart';
+import '../../../helpers/constants.dart';
+import '../../pages/textedit.dart';
 
-import '../components/alertdialog.dart';
-import '../components/navigationdrawer.dart';
-import '../animation/searchbar.dart';
-import '../cubit/theme_cubit/theme_cubit.dart';
-
-class Homepage extends StatelessWidget {
-  const Homepage({super.key});
+class TabletScreen extends StatelessWidget {
+  const TabletScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final themeState = context.watch<ThemeCubit>().state;
+
     return Scaffold(
-      backgroundColor: themeState.switchValue ? Colors.white : const Color(0xff282828),
+      backgroundColor: themeState.switchValue ? kBackgroundColorLight : kBackgroundColorDark,
       appBar: AppBar(
-        backgroundColor: themeState.switchValue ? Colors.white : const Color(0xff282828),
+        backgroundColor: themeState.switchValue ? kBackgroundColorLight : kBackgroundColorDark,
         elevation: 0.0,
-        iconTheme: IconThemeData(color: themeState.switchValue ? Colors.black : Colors.white),
+        iconTheme: IconThemeData(color: themeState.switchValue ? kBackgroundColorDark : kBackgroundColorLight),
         actions: [
-          const SearchBar(),
+          SearchBar(),
           IconButton(
             onPressed: () {},
             icon: const Icon(
-              Icons.cloud_upload,
+              Icons.sync,
               size: 30,
             ),
-          )
+          ),
+          const SizedBox(
+            width: 20,
+          ),
         ],
       ),
-      drawer: const NavigationDrawer(),
+      drawer: NavigationDrawer(
+        showButton: true,
+      ),
       body: Column(
         children: [
-          BlocBuilder<SearchfieldCubit, SearchfieldState>(
-            builder: (context, searchfieldState) {
-              return BlocBuilder<NotesCubit, NotesState>(
-                builder: (context, notesState) {
-                  return searchfieldState.focusNode.hasFocus == false || searchfieldState.controller.text.isEmpty
-                      ? Text(
-                          'Alle Notizen (${notesState.notesList.length})',
-                          style: TextStyle(fontSize: 30, color: themeState.switchValue ? Colors.black : Colors.white),
-                        )
-                      : Text(
-                          'Suchergebnisse (${notesState.filteredNotesList.length})',
-                          style: TextStyle(fontSize: 30, color: themeState.switchValue ? Colors.black : Colors.white),
-                        );
-                },
-              );
-            },
-          ),
+          const Header(ascpectRatio: 4, crossAxisCount: 4, itemCount: 4),
           Expanded(
             child: BlocBuilder<NotesCubit, NotesState>(
               builder: (context, notesState) {
@@ -75,6 +68,7 @@ class Homepage extends StatelessWidget {
                                   ? notesState.notesList[index].toString()
                                   : notesState.filteredNotesList[index].toString(),
                             ),
+                            isDragging: true,
                             endToStart: () {
                               showDialog(
                                 context: context,
@@ -124,7 +118,7 @@ class Homepage extends StatelessWidget {
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => const TextEditPage(),
+                                            builder: (context) => const NotesEditPage(),
                                           ),
                                         );
                                       },
@@ -151,28 +145,6 @@ class Homepage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-      floatingActionButton: BlocBuilder<SearchfieldCubit, SearchfieldState>(
-        builder: (context, state) {
-          return FloatingActionButton(
-            onPressed: () {
-              context.read<NotesCubit>().cleanSelectedNote();
-              state.controller.clear();
-              state.focusNode.unfocus();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: ((BuildContext context) => const TextEditPage()),
-                ),
-              );
-            },
-            backgroundColor: Colors.amber,
-            child: const Icon(
-              Icons.add,
-              color: Colors.black,
-            ),
-          );
-        },
       ),
     );
   }

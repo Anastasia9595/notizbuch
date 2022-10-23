@@ -1,4 +1,7 @@
 import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 enum WeekDay {
   mon,
@@ -37,4 +40,13 @@ String dateToString(DateTime date) {
   return '${date.day}.${date.month}.${date.year}';
 }
 
-const kBackgroundColor = Color(0xffFFFFFF);
+// convert delta title object to string
+String deltaTitleToString(Delta delta) {
+  return delta.toString().replaceAll(RegExp('[^A-Za-z0-9]'), '').replaceAll(RegExp('insert'), '');
+}
+
+//const kBackgroundColor = Color(0xffFFFFFF);
+const kBackgroundColorDark = Color.fromARGB(255, 39, 39, 39);
+const kBackgroundColorLight = Color(0xffF5F5F5);
+
+//const TextStyle kNoteTitle = TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold);

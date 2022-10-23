@@ -1,12 +1,8 @@
-import 'dart:developer';
-
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notizapp/model/note.dart';
-import 'package:notizapp/view/textedit.dart';
 
 part 'notes_state.dart';
 

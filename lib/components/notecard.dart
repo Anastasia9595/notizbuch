@@ -7,7 +7,6 @@ import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import '../cubit/theme_cubit/theme_cubit.dart';
 import '../helpers/constants.dart';
 import '../model/note.dart';
-import '../view/textedit.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;
@@ -21,10 +20,6 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    quill.QuillController titleController = quill.QuillController(
-      document: quill.Document.fromDelta(note.title),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
     quill.QuillController descriptionController = quill.QuillController(
       document: quill.Document.fromDelta(note.description),
       selection: const TextSelection.collapsed(offset: 0),
@@ -32,30 +27,38 @@ class NoteCard extends StatelessWidget {
 
     final themeState = context.watch<ThemeCubit>().state;
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8, top: 12),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.85,
+        width: MediaQuery.of(context).size.width * 0.8,
         height: 150,
         child: BlocBuilder<NotesCubit, NotesState>(
           builder: (context, state) {
             return Container(
               decoration: BoxDecoration(
-                color: themeState.switchValue ? Colors.white.withOpacity(0.3) : Colors.white,
+                color: themeState.switchValue ? Colors.white : Colors.white,
                 borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade600,
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                    offset: const Offset(2, 2),
-                  ),
-                  BoxShadow(
-                    color: themeState.switchValue ? Colors.white : Colors.black,
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                    offset: const Offset(-2, -2),
-                  ),
-                ],
+                boxShadow: themeState.switchValue
+                    ? [
+                        BoxShadow(
+                          color: Colors.grey.shade600,
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                          offset: const Offset(2, 2),
+                        ),
+                        BoxShadow(
+                          color: themeState.switchValue ? Colors.white : Colors.black,
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                          offset: const Offset(-2, -2),
+                        ),
+                      ]
+                    : [
+                        BoxShadow(
+                          offset: Offset(4, 4),
+                          blurRadius: 8,
+                          color: Colors.black.withOpacity(0.8),
+                        ),
+                      ],
               ),
               child: Row(
                 children: [
@@ -113,16 +116,16 @@ class NoteCard extends StatelessWidget {
                           flex: 25,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 20, left: 10),
-                            child: quill.QuillEditor.basic(
-                              controller: titleController,
-                              readOnly: true, // true for view only mode
+                            child: Text(
+                              deltaTitleToString(note.title),
+                              style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         Expanded(
                           flex: 50,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 10, left: 10),
+                            padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
                             child: quill.QuillEditor.basic(
                               controller: descriptionController,
                               readOnly: true, // true for view only mode
