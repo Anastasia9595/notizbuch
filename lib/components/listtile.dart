@@ -6,6 +6,7 @@ import 'package:notizapp/cubit/favorites_cubit/favorites_cubit.dart';
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/helpers/constants.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:notizapp/view/pages/textedit.dart';
 import 'package:tuple/tuple.dart';
 
 import '../cubit/theme_cubit/theme_cubit.dart';
@@ -80,11 +81,11 @@ class ListTileNote extends StatelessWidget {
                                 }
                               },
                               icon: newNote.isFavorite
-                                  ? Icon(
+                                  ? const Icon(
                                       Icons.star,
                                       color: Colors.white,
                                     )
-                                  : Icon(
+                                  : const Icon(
                                       Icons.star_border_outlined,
                                       color: Colors.white,
                                     )),
