@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
+import 'package:notizapp/cubit/favorites_cubit/favorites_cubit.dart';
 
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
 import 'package:notizapp/cubit/theme_cubit/theme_cubit.dart';
 import 'package:notizapp/view/pages/all_notes.dart';
+import 'package:notizapp/view/pages/home.dart';
+import 'package:notizapp/view/pages/splashscreen.dart';
 
 import 'package:notizapp/view/screens/responsive_layout.dart';
 import 'package:notizapp/view/screens/responsive_screens/desktop_screen.dart';
@@ -32,6 +35,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(const AssetImage('assets/background.jpg'), context);
     return MultiBlocProvider(
       providers: [
         BlocProvider<NotesCubit>(
@@ -47,11 +51,14 @@ class MyApp extends StatelessWidget {
           lazy: false,
           create: ((context) => ArchiveNotesCubit()),
         ),
+        BlocProvider<FavoritesCubit>(
+          create: ((context) => FavoritesCubit()),
+        ),
       ],
       child: Builder(builder: (context) {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: AllNotesPage(),
+          home: MobileScreen(),
         );
       }),
     );

@@ -60,11 +60,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
           children: [
             ListTile(
               leading: const Icon(
-                Icons.storage_rounded,
+                Icons.delete_forever,
                 color: Colors.white,
               ),
               title: const Text(
-                'Archive',
+                'Trash',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               onTap: () {

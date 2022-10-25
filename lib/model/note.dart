@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
@@ -9,14 +7,15 @@ class Note extends Equatable {
   final Delta description;
   final DateTime date;
   final bool done;
+  final bool isFavorite;
 
-  const Note({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.date,
-    required this.done,
-  });
+  const Note(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.date,
+      required this.done,
+      required this.isFavorite});
 
   Note copyWith({
     int? id,
@@ -25,6 +24,7 @@ class Note extends Equatable {
     DateTime? date,
     bool? done,
     bool? isChanged,
+    bool? isFavorite,
   }) {
     return Note(
       title: title ?? this.title,
@@ -32,6 +32,7 @@ class Note extends Equatable {
       date: date ?? this.date,
       done: done ?? this.done,
       id: id ?? this.id,
+      isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
@@ -42,6 +43,7 @@ class Note extends Equatable {
       'description': description.toJson(),
       'date': date.toIso8601String(),
       'done': done,
+      'isFavorite': isFavorite,
     };
   }
 
@@ -52,6 +54,7 @@ class Note extends Equatable {
       description: Delta.fromJson(map['description']),
       date: DateTime.parse(map['date']),
       done: map['done'],
+      isFavorite: map['isFavorite'],
     );
   }
 
@@ -62,5 +65,6 @@ class Note extends Equatable {
         description,
         date,
         done,
+        isFavorite,
       ];
 }

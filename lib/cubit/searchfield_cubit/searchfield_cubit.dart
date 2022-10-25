@@ -10,7 +10,11 @@ class SearchfieldCubit extends Cubit<SearchfieldState> {
           SearchfieldState(
             controller: TextEditingController(),
             focusNode: FocusNode(),
-            folded: false,
+            folded: true,
           ),
         );
+
+  void setFolded(bool value) {
+    emit(state.copyWith(folded: value));
+  }
 }

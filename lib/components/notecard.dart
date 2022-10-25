@@ -6,6 +6,7 @@ import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 
 import '../cubit/theme_cubit/theme_cubit.dart';
 import '../helpers/constants.dart';
+import '../helpers/functions.dart';
 import '../model/note.dart';
 
 class NoteCard extends StatelessWidget {

@@ -5,6 +5,7 @@ import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 import '../cubit/theme_cubit/theme_cubit.dart';
 import '../helpers/constants.dart';
+import '../helpers/functions.dart';
 import '../model/note.dart';
 
 class HeaderMobile extends StatelessWidget {
@@ -24,7 +25,7 @@ class HeaderMobile extends StatelessWidget {
     );
     return Container(
       width: 150,
-      margin: const EdgeInsets.only(right: 15, left: 15),
+      margin: const EdgeInsets.only(right: 10, left: 10),
       height: categoryHeight,
       decoration: BoxDecoration(
         boxShadow: themeState.switchValue
@@ -51,7 +52,7 @@ class HeaderMobile extends StatelessWidget {
               ],
         color: Colors.white,
         borderRadius: const BorderRadius.all(
-          Radius.circular(20.0),
+          Radius.circular(12.0),
         ),
       ),
       child: Padding(

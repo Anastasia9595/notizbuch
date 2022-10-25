@@ -18,6 +18,7 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
               description: Delta(),
               date: DateTime.now(),
               done: false,
+              isFavorite: false,
             ),
             filteredNotesList: const [],
           ),
@@ -34,6 +35,7 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
       description: description,
       date: DateTime.now(),
       done: false,
+      isFavorite: false,
     );
 
     emit(state.copyWith(
@@ -85,6 +87,7 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
           description: Delta(),
           date: DateTime.now(),
           done: false,
+          isFavorite: false,
         ),
       ),
     );
@@ -112,6 +115,13 @@ class NotesCubit extends Cubit<NotesState> with HydratedMixin {
         notesList.where((element) => element.title.toString().toLowerCase().contains(name.toLowerCase())).toList();
 
     emit(state.copyWith(filteredNotesList: filteredList));
+  }
+
+  void setIsFavorite(int id, bool value) {
+    Note targetNote = state.notesList.firstWhere((element) => element.id == id);
+    Note updatedNote = targetNote.copyWith(isFavorite: value);
+
+    emit(state.copyWith(notesList: state.notesList.map((e) => e.id == id ? e = updatedNote : e).toList()));
   }
 
   @override

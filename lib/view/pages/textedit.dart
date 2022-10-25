@@ -1,4 +1,5 @@
 import 'package:notizapp/helpers/constants.dart';
+import 'package:notizapp/view/pages/all_notes.dart';
 
 import 'package:tuple/tuple.dart';
 
@@ -11,6 +12,7 @@ import 'package:flutter_quill/flutter_quill.dart' as q;
 
 import '../../cubit/theme_cubit/theme_cubit.dart';
 
+import '../../helpers/functions.dart';
 import '../screens/responsive_layout.dart';
 import '../screens/responsive_screens/desktop_screen.dart';
 import '../screens/responsive_screens/mobile_screen.dart';
@@ -76,11 +78,7 @@ class _NotesEditPageState extends State<NotesEditPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: ((BuildContext context) => const ResponsiveLayout(
-                                  mobileScaffold: MobileScreen(),
-                                  tabletScaffold: TabletScreen(),
-                                  desktopScaffold: DesktopScreen(),
-                                )),
+                            builder: ((BuildContext context) => const AllNotesPage()),
                           ),
                         );
                       },

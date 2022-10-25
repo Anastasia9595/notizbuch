@@ -7,6 +7,7 @@ import '../cubit/theme_cubit/theme_cubit.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 import '../helpers/constants.dart';
+import '../helpers/functions.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key, required this.ascpectRatio, required this.crossAxisCount, required this.itemCount});

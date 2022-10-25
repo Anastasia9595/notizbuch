@@ -125,39 +125,40 @@ class _SearchBarState extends State<SearchBar> with SingleTickerProviderStateMix
             Container(
               width: 45,
               decoration: BoxDecoration(
-                color: themeState.switchValue ? kBackgroundColorLight : Colors.amber,
+                color: themeState.switchValue ? kBackgroundColorLight : kBackgroundColorDark,
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
                   color: themeState.switchValue ? kBackgroundColorLight : kBackgroundColorDark,
                   width: 1.5,
                 ),
               ),
-              //borderRadius: BorderRadius.circular(30),
-              child: BlocBuilder<SearchfieldCubit, SearchfieldState>(builder: (context, state) {
-                return IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (toggle == 0) {
-                        toggle = 1;
+              child: BlocBuilder<SearchfieldCubit, SearchfieldState>(
+                builder: (context, state) {
+                  return IconButton(
+                    onPressed: () {
+                      setState(() {
+                        if (toggle == 0) {
+                          toggle = 1;
 
-                        _con!.forward();
-                        state.controller.clear();
-                      } else {
-                        toggle = 0;
-                        _con!.reverse();
-                        context.read<NotesCubit>().resetList();
-                        state.focusNode.unfocus();
-                        state.controller.clear();
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    Icons.search,
-                    color: themeState.switchValue ? Colors.black : Colors.black,
-                    size: 26,
-                  ),
-                );
-              }),
+                          _con!.forward();
+                          state.controller.clear();
+                        } else {
+                          toggle = 0;
+                          _con!.reverse();
+                          context.read<NotesCubit>().resetList();
+                          state.focusNode.unfocus();
+                          state.controller.clear();
+                        }
+                      });
+                    },
+                    icon: Icon(
+                      Icons.search,
+                      color: themeState.switchValue ? Colors.black : Colors.white,
+                      size: 26,
+                    ),
+                  );
+                },
+              ),
             )
           ],
         ),

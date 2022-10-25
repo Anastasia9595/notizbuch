@@ -3,9 +3,15 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/animation/new_searchbar.dart';
+import 'package:notizapp/animation/searchbar.dart';
 import 'package:notizapp/components/listtile.dart';
+import 'package:notizapp/cubit/favorites_cubit/favorites_cubit.dart';
 import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
 import 'package:notizapp/view/pages/textedit.dart';
+import 'package:notizapp/view/screens/responsive_layout.dart';
+import 'package:notizapp/view/screens/responsive_screens/desktop_screen.dart';
+import 'package:notizapp/view/screens/responsive_screens/mobile_screen.dart';
+import 'package:notizapp/view/screens/responsive_screens/tablet_screen.dart';
 
 import '../../components/alertdialog.dart';
 import '../../components/dimissible_card.dart';
@@ -25,12 +31,21 @@ class AllNotesPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: themeState ? Colors.white : const Color(0xff282828),
         elevation: 0.0,
-        actions: [
-          const AnimatedSearchBar(),
+        actions: const [
+          AnimatedSearchBar(),
         ],
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: ((BuildContext context) => const ResponsiveLayout(
+                      mobileScaffold: MobileScreen(),
+                      tabletScaffold: TabletScreen(),
+                      desktopScaffold: DesktopScreen(),
+                    )),
+              ),
+            );
           },
           icon: Icon(
             Icons.arrow_back_ios_new,
@@ -45,12 +60,15 @@ class AllNotesPage extends StatelessWidget {
             children: [
               BlocBuilder<NotesCubit, NotesState>(
                 builder: (context, state) {
-                  return Text(
-                    'Notizen (${state.notesList.length})',
-                    style: TextStyle(
-                      color: themeState ? Colors.black : Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      'Notizen (${state.notesList.length})',
+                      style: TextStyle(
+                        color: themeState ? Colors.black : Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   );
                 },
@@ -117,9 +135,8 @@ class AllNotesPage extends StatelessWidget {
                                   return InkWell(
                                     onTap: () {
                                       context.read<NotesCubit>().setNotetoEdit(
-                                          searchState.controller.text.isEmpty || !searchState.focusNode.hasFocus
-                                              ? notesState.notesList[index]
-                                              : notesState.filteredNotesList[index]);
+                                            notesState.notesList[index],
+                                          );
 
                                       searchState.controller.clear();
                                       searchState.focusNode.unfocus();
@@ -130,8 +147,14 @@ class AllNotesPage extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                    child: ListTileNote(
-                                      note: notesState.notesList[index],
+                                    child: BlocBuilder<FavoritesCubit, FavoritesState>(
+                                      builder: (context, state) {
+                                        return ListTileNote(
+                                            id: searchState.focusNode.hasFocus == false ||
+                                                    searchState.controller.text.isEmpty
+                                                ? notesState.notesList[index].id
+                                                : notesState.filteredNotesList[index].id);
+                                      },
                                     ),
                                   );
                                 },
@@ -146,6 +169,28 @@ class AllNotesPage extends StatelessWidget {
           ),
         ),
       ]),
+      floatingActionButton: BlocBuilder<SearchfieldCubit, SearchfieldState>(
+        builder: (context, state) {
+          return FloatingActionButton(
+            onPressed: () {
+              context.read<NotesCubit>().cleanSelectedNote();
+              state.controller.clear();
+              state.focusNode.unfocus();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: ((BuildContext context) => const NotesEditPage()),
+                ),
+              );
+            },
+            backgroundColor: Colors.amber,
+            child: const Icon(
+              Icons.add,
+              color: Colors.black,
+            ),
+          );
+        },
+      ),
     );
   }
 }
