@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:notizapp/cubit/archive_notes_cubit/archive_notes_cubit.dart';
-import 'package:notizapp/cubit/favorites_cubit/favorites_cubit.dart';
 
-import 'package:notizapp/cubit/notes_cubit/notes_cubit.dart';
-import 'package:notizapp/cubit/searchfield_cubit/searchfield_cubit.dart';
-import 'package:notizapp/cubit/theme_cubit/theme_cubit.dart';
-import 'package:notizapp/view/pages/all_notes.dart';
-import 'package:notizapp/view/pages/home.dart';
-import 'package:notizapp/view/pages/splashscreen.dart';
-
-import 'package:notizapp/view/screens/responsive_layout.dart';
-import 'package:notizapp/view/screens/responsive_screens/desktop_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'view/screens/responsive_screens/mobile_screen.dart';
-import 'view/screens/responsive_screens/tablet_screen.dart';
+import 'business_logic/cubits/trash_notes_cubit/trash_notes_cubit.dart';
+import 'business_logic/cubits/favorites_cubit/favorites_cubit.dart';
+import 'business_logic/cubits/notes_cubit/notes_cubit.dart';
+import 'business_logic/cubits/searchfield_cubit/searchfield_cubit.dart';
+import 'business_logic/cubits/theme_cubit/theme_cubit.dart';
+import 'presentation/view/screens/responsive_screens/mobile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,9 +40,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ThemeCubit>(
           create: ((context) => ThemeCubit()),
         ),
-        BlocProvider<ArchiveNotesCubit>(
+        BlocProvider<TrashNotesCubit>(
           lazy: false,
-          create: ((context) => ArchiveNotesCubit()),
+          create: ((context) => TrashNotesCubit()),
         ),
         BlocProvider<FavoritesCubit>(
           create: ((context) => FavoritesCubit()),
