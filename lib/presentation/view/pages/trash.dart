@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/presentation/animation/new_searchbar.dart';
-import 'package:notizapp/presentation/components/alrtdialog.dart';
-import 'package:notizapp/presentation/components/listtile.dart';
 import 'package:notizapp/presentation/view/pages/textedit.dart';
 import 'package:notizapp/presentation/view/screens/responsive_layout.dart';
 import 'package:notizapp/presentation/view/screens/responsive_screens/desktop_screen.dart';
@@ -10,11 +8,9 @@ import 'package:notizapp/presentation/view/screens/responsive_screens/mobile_scr
 import 'package:notizapp/presentation/view/screens/responsive_screens/tablet_screen.dart';
 
 import '../../../business_logic/cubits/trash_notes_cubit/trash_notes_cubit.dart';
-import '../../../business_logic/cubits/favorites_cubit/favorites_cubit.dart';
 import '../../../business_logic/cubits/notes_cubit/notes_cubit.dart';
 import '../../../business_logic/cubits/searchfield_cubit/searchfield_cubit.dart';
 import '../../../business_logic/cubits/theme_cubit/theme_cubit.dart';
-import '../../components/dimissible_card.dart';
 
 class TrashNotePage extends StatelessWidget {
   const TrashNotePage({super.key});

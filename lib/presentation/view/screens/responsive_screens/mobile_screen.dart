@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ class MobileScreen extends StatefulWidget {
 
 class _MobileScreenState extends State<MobileScreen> {
   ScrollController controller = ScrollController();
+  final user = FirebaseAuth.instance.currentUser;
 
   bool closeTopContainer = false;
   double topContainer = 0;
@@ -43,9 +45,9 @@ class _MobileScreenState extends State<MobileScreen> {
             iconTheme: const IconThemeData(color: kBackgroundColorLight),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => FirebaseAuth.instance.signOut(),
                 icon: const Icon(
-                  Icons.sync,
+                  Icons.arrow_circle_left,
                   size: 30,
                 ),
               ),
