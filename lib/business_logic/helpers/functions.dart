@@ -1,6 +1,17 @@
+import 'dart:ffi';
+
 import 'package:flutter_quill/flutter_quill.dart';
 
 String capitalize(String name) {
+  // var aCode = 'A'.codeUnitAt(0);
+  // var zCode = 'Z'.codeUnitAt(0);
+  // List<String> alphabets = List<String>.generate(
+  //   zCode - aCode + 1,
+  //   (index) => String.fromCharCode(aCode + index),
+  // );
+  // if (alphabets.contains(name[0])) {
+  //   return name;
+  // }
   return '${name[0].toUpperCase()}${name.substring(1).toLowerCase()}';
 }
 

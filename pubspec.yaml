@@ -9,12 +9,17 @@ environment:
   sdk: ">=2.18.0 <3.0.0"
 
 dependencies:
+  cloud_firestore: ^4.0.5
   cupertino_icons: ^1.0.2
+  email_validator: ^2.1.17
   equatable: ^2.0.5
+  firebase_auth: ^4.1.1
+  firebase_core: ^2.1.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
   flutter_quill: ^6.0.7
+  flutter_svg: ^1.1.6
   hydrated_bloc: ^8.1.0
   lottie: ^1.4.3
   path_provider: ^2.0.11
