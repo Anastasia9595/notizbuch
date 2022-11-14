@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:notizapp/main.dart';
 
 import '../../components/sign_button.dart';
@@ -73,8 +74,6 @@ class LoginWidget extends StatelessWidget {
                 ),
                 // email textfield
                 TextfieldComponent(
-                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  validator: (email) => email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
                   textEditingController: _emailTextController,
                   hintext: 'Email',
                   obscureText: false,
@@ -86,8 +85,6 @@ class LoginWidget extends StatelessWidget {
 
                 // password textfield
                 TextfieldComponent(
-                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  validator: (password) => password != null && password.length < 6 ? 'Enter min. 6 characters' : null,
                   textEditingController: _passwordTextController,
                   hintext: 'Password',
                   obscureText: true,
@@ -168,12 +165,7 @@ class LoginWidget extends StatelessWidget {
                       child: Container(
                         height: 35,
                         width: 35,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/github.png'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                        child: SvgPicture.asset('assets/github.svg'),
                       ),
                     ),
                     InkWell(

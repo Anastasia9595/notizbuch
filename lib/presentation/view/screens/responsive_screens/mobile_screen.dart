@@ -24,7 +24,6 @@ class _MobileScreenState extends State<MobileScreen> {
   User? user = FirebaseAuth.instance.currentUser;
 
   ScrollController controller = ScrollController();
-  final user = FirebaseAuth.instance.currentUser;
 
   bool closeTopContainer = false;
   double topContainer = 0;

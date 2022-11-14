@@ -66,8 +66,6 @@ class ResetPasswordPage extends StatelessWidget {
                 ),
                 // email textfield
                 TextfieldComponent(
-                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  validator: (email) => email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
                   textEditingController: _emailTextController,
                   hintext: 'Email',
                   obscureText: false,
