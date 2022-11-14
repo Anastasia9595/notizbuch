@@ -14,7 +14,11 @@ packages:
       name: _flutterfire_internals
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.0.8"
+=======
+    version: "1.0.7"
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   analyzer:
     dependency: transitive
     description:
@@ -71,6 +75,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+<<<<<<< HEAD
   cloud_firestore:
     dependency: "direct main"
     description:
@@ -78,20 +83,30 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.5"
+=======
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "5.8.5"
+=======
+    version: "5.8.4"
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "3.0.5"
+=======
+    version: "3.0.4"
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   collection:
     dependency: transitive
     description:
@@ -210,28 +225,44 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "4.1.2"
+=======
+    version: "4.1.1"
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "6.11.2"
+=======
+    version: "6.11.1"
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "5.1.2"
+=======
+    version: "5.1.1"
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.2.0"
+=======
+    version: "2.1.1"
+>>>>>>> eeb9c51c0a7d90f2d8fbf74aea8f6187c7377cdc
   firebase_core_platform_interface:
     dependency: transitive
     description:

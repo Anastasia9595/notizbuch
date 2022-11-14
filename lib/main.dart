@@ -2,8 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:notizapp/presentation/components/utils.dart';
-import 'package:notizapp/presentation/view/pages/authentication_page.dart';
+import 'package:notizapp/presentation/view/pages/login.dart';
 
 import 'package:path_provider/path_provider.dart';
 
@@ -58,10 +57,9 @@ class MyApp extends StatelessWidget {
       ],
       child: Builder(builder: (context) {
         return MaterialApp(
-          scaffoldMessengerKey: Utils.messengerKey,
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
-          home: const UserAuthPage(),
+          home: LoginPage(),
         );
       }),
     );

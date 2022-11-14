@@ -1,37 +1,40 @@
 import 'dart:developer';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:notizapp/main.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notizapp/presentation/components/sign_button.dart';
+import 'package:notizapp/presentation/components/textfield.dart';
+import 'package:notizapp/presentation/view/pages/login.dart';
+import 'package:notizapp/presentation/view/screens/responsive_screens/mobile_screen.dart';
 
-import '../../components/sign_button.dart';
-import '../../components/textfield.dart';
+import '../../../business_logic/cubits/theme_cubit/theme_cubit.dart';
+import '../../../business_logic/helpers/constants.dart';
+import '../../../main.dart';
 
-class LoginWidget extends StatelessWidget {
-  LoginWidget({super.key, required this.onClickedSignUp});
-  final formKey = GlobalKey<FormState>();
+class RegistrationPage extends StatelessWidget {
+  RegistrationPage({super.key, required this.onClickedSignUp});
+  final _nameTextController = TextEditingController();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final VoidCallback onClickedSignUp;
-  bool isValid = false;
 
-  Future signIn(BuildContext context) async {
-    isValid = formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
+  Future signUp(BuildContext context) async {
     showDialog(
         context: context,
         builder: (context) => const Center(
               child: CircularProgressIndicator(),
             ));
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailTextController.text,
         password: _passwordTextController.text,
       );
+      User? user = result.user;
+      if (user != null) {
+        await user.updateDisplayName(_nameTextController.text);
+      }
     } on FirebaseAuthException catch (e) {
       log(e.toString());
     }
@@ -41,19 +44,20 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Center(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: formKey,
+    final themeState = context.watch<ThemeCubit>().state.switchValue;
+    return Scaffold(
+      backgroundColor: themeState ? kBackgroundColorLight : kBackgroundColorDark,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               children: [
                 // greeting
-                const Text(
-                  'Hello Again',
+                Text(
+                  'Hello',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: themeState ? Colors.black : Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 36,
                   ),
@@ -62,23 +66,30 @@ class LoginWidget extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  'Welcome Back',
+                  'Create Account',
                   style: TextStyle(
-                    color: Colors.grey.shade400,
+                    color: themeState ? Colors.black : Colors.white,
                     fontSize: 26,
                   ),
                 ),
                 const SizedBox(
                   height: 50,
                 ),
+                TextfieldComponent(
+                  textEditingController: _nameTextController,
+                  hintext: 'Name',
+                  obscureText: false,
+                  icon: const Icon(Icons.person),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 // email textfield
                 TextfieldComponent(
-                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  validator: (email) => email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
                   textEditingController: _emailTextController,
                   hintext: 'Email',
                   obscureText: false,
-                  icon: const Icon(Icons.mail),
+                  icon: Icon(Icons.mail),
                 ),
                 const SizedBox(
                   height: 20,
@@ -86,44 +97,38 @@ class LoginWidget extends StatelessWidget {
 
                 // password textfield
                 TextfieldComponent(
-                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  validator: (password) => password != null && password.length < 6 ? 'Enter min. 6 characters' : null,
                   textEditingController: _passwordTextController,
                   hintext: 'Password',
                   obscureText: true,
-                  icon: const Icon(Icons.security),
+                  icon: Icon(Icons.security),
                 ),
                 const SizedBox(
                   height: 25,
                 ),
 
                 //sign in button
+                SignButton(
+                  onPressedFunction: () => signUp(context),
+                  buttonName: 'Sign up',
+                ),
 
                 const SizedBox(
-                  height: 20,
+                  height: 25,
                 ),
 
                 // register button
-                SignButton(
-                  onPressedFunction: () => signIn(context),
-                  buttonName: 'Sign in',
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-
                 RichText(
                   text: TextSpan(
                     children: [
                       const TextSpan(
-                        text: 'Don\'t have an account? ',
+                        text: 'Already have an account? ',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                         ),
                       ),
                       TextSpan(
-                        text: 'Sign up',
+                        text: 'Sign in',
                         style: TextStyle(
                           color: Colors.blue,
                           fontSize: 16,
@@ -136,16 +141,15 @@ class LoginWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(
                   height: 15,
                 ),
 
                 const Text(
-                  'Or Sign in with',
+                  'Or Sign up with',
                   style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 15,
                 ),
 
