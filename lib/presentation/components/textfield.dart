@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
 class TextfieldComponent extends StatelessWidget {
-  const TextfieldComponent(
-      {super.key,
-      required this.hintext,
-      required this.obscureText,
-      required this.icon,
-      required this.textEditingController});
+  const TextfieldComponent({
+    super.key,
+    required this.autovalidateMode,
+    required this.hintext,
+    required this.obscureText,
+    required this.icon,
+    required this.textEditingController,
+    required this.validator,
+  });
   final String hintext;
+  final AutovalidateMode autovalidateMode;
   final bool obscureText;
   final Icon icon;
   final TextEditingController textEditingController;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +28,10 @@ class TextfieldComponent extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: TextField(
+          child: TextFormField(
+            validator: validator,
             controller: textEditingController,
+            autovalidateMode: autovalidateMode,
             obscureText: obscureText,
             decoration: InputDecoration(border: InputBorder.none, hintText: hintext, icon: icon),
           ),

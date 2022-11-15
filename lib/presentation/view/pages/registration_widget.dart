@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -16,8 +17,8 @@ import '../../../business_logic/cubits/theme_cubit/theme_cubit.dart';
 import '../../../business_logic/helpers/constants.dart';
 import '../../../main.dart';
 
-class RegistrationPage extends StatelessWidget {
-  RegistrationPage({super.key, required this.onClickedSignUp});
+class RegistrationWidget extends StatelessWidget {
+  RegistrationWidget({super.key, required this.onClickedSignUp});
 
   final formKey = GlobalKey<FormState>();
   final _nameTextController = TextEditingController();
@@ -103,6 +104,8 @@ class RegistrationPage extends StatelessWidget {
                     height: 50,
                   ),
                   TextfieldComponent(
+                    autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                    validator: (name) => name != null && name.length < 3 ? 'Enter a valid name' : null,
                     textEditingController: _nameTextController,
                     hintext: 'Name',
                     obscureText: false,
@@ -113,6 +116,9 @@ class RegistrationPage extends StatelessWidget {
                   ),
                   // email textfield
                   TextfieldComponent(
+                    autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                    validator: (email) =>
+                        email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
                     textEditingController: _emailTextController,
                     hintext: 'Email',
                     obscureText: false,
@@ -124,6 +130,8 @@ class RegistrationPage extends StatelessWidget {
 
                   // password textfield
                   TextfieldComponent(
+                    autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                    validator: (password) => password != null && password.length < 6 ? 'Enter min. 6 characters' : null,
                     textEditingController: _passwordTextController,
                     hintext: 'Password',
                     obscureText: true,

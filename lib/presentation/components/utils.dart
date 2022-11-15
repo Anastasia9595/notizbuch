@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class Utils {
@@ -14,5 +15,26 @@ class Utils {
     messengerKey.currentState!
       ..removeCurrentSnackBar()
       ..showSnackBar(snackBar);
+  }
+
+  static validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your name';
+    }
+    return null;
+  }
+
+  static validateEmail(String? value) {
+    if (value == null || value.isEmpty || !EmailValidator.validate(value)) {
+      return 'Please enter your email';
+    }
+    return null;
+  }
+
+  static validatePassword(String? value) {
+    if (value == null || value.isEmpty || value.length < 6) {
+      return 'Please enter your password';
+    }
+    return null;
   }
 }

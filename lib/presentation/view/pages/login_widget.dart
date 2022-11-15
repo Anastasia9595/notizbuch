@@ -9,13 +9,15 @@ import 'package:notizapp/main.dart';
 
 import '../../components/sign_button.dart';
 import '../../components/textfield.dart';
+import '../../components/utils.dart';
 
 class LoginWidget extends StatelessWidget {
-  LoginWidget({super.key, required this.onClickedSignUp});
+  LoginWidget({super.key, required this.onClickedSignUp, required this.onClickedForgotPassword});
   final formKey = GlobalKey<FormState>();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final VoidCallback onClickedSignUp;
+  final VoidCallback onClickedForgotPassword;
   bool isValid = false;
 
   Future signIn(BuildContext context) async {
@@ -74,6 +76,8 @@ class LoginWidget extends StatelessWidget {
                 ),
                 // email textfield
                 TextfieldComponent(
+                  validator: (email) => email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
+                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                   textEditingController: _emailTextController,
                   hintext: 'Email',
                   obscureText: false,
@@ -85,6 +89,8 @@ class LoginWidget extends StatelessWidget {
 
                 // password textfield
                 TextfieldComponent(
+                  validator: (password) => password != null && password.length < 6 ? 'Enter min. 6 characters' : null,
+                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                   textEditingController: _passwordTextController,
                   hintext: 'Password',
                   obscureText: true,
@@ -110,6 +116,7 @@ class LoginWidget extends StatelessWidget {
                 ),
 
                 RichText(
+                  textAlign: TextAlign.center,
                   text: TextSpan(
                     children: [
                       const TextSpan(
@@ -121,13 +128,25 @@ class LoginWidget extends StatelessWidget {
                       ),
                       TextSpan(
                         text: 'Sign up',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.blue,
                           fontSize: 16,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             onClickedSignUp();
+                          },
+                      ),
+                      TextSpan(
+                        text: '\nForgot Password?',
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          height: 1.8,
+                          fontSize: 16,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            onClickedForgotPassword();
                           },
                       ),
                     ],
@@ -165,13 +184,6 @@ class LoginWidget extends StatelessWidget {
                       child: Container(
                         height: 35,
                         width: 35,
-                        child: SvgPicture.asset('assets/github.svg'),
-                      ),
-                    ),
-                    InkWell(
-                      child: Container(
-                        height: 35,
-                        width: 35,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/facebook.png'),
@@ -179,7 +191,14 @@ class LoginWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    InkWell(
+                      child: Container(
+                        height: 35,
+                        width: 35,
+                        child: SvgPicture.asset('assets/github.svg'),
+                      ),
+                    ),
                   ],
                 )
               ],

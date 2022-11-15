@@ -66,6 +66,8 @@ class ResetPasswordPage extends StatelessWidget {
                 ),
                 // email textfield
                 TextfieldComponent(
+                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                  validator: (email) => email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
                   textEditingController: _emailTextController,
                   hintext: 'Email',
                   obscureText: false,
@@ -98,22 +100,17 @@ class ResetPasswordPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     children: [
-                      const TextSpan(
-                        text: 'Already have an account?',
-                        style: TextStyle(
-                          height: 1.5,
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
                       TextSpan(
-                        text: '\nSign In',
+                        text: 'Already have an account?',
                         style: const TextStyle(
                           height: 1.5,
                           color: Colors.blue,
                           fontSize: 16,
                         ),
-                        recognizer: TapGestureRecognizer()..onTap = onClickedSignIn,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            onClickedSignIn();
+                          },
                       ),
                     ],
                   ),
