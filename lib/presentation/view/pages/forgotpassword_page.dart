@@ -4,7 +4,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:notizapp/presentation/components/utils.dart';
+import 'package:notizapp/business_logic/helpers/constants.dart';
+import 'package:notizapp/business_logic/helpers/utils.dart';
 
 import '../../components/sign_button.dart';
 import '../../components/textfield.dart';
@@ -67,7 +68,7 @@ class ResetPasswordPage extends StatelessWidget {
                 // email textfield
                 TextfieldComponent(
                   autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  validator: (email) => email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
+                  validator: (email) => Utils.validateEmail(email),
                   textEditingController: _emailTextController,
                   hintext: 'Email',
                   obscureText: false,
@@ -86,7 +87,7 @@ class ResetPasswordPage extends StatelessWidget {
                 // register button
                 SignButton(
                   onPressedFunction: () => resetPassword(context),
-                  buttonName: 'Reset Password ✉',
+                  buttonName: 'Reset Password',
                 ),
                 const SizedBox(
                   height: 20,
@@ -101,16 +102,16 @@ class ResetPasswordPage extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Already have an account?',
-                        style: const TextStyle(
-                          height: 1.5,
-                          color: Colors.blue,
-                          fontSize: 16,
-                        ),
+                        text: 'Go back to Sign In',
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             onClickedSignIn();
                           },
+                        style: const TextStyle(
+                          height: 1.5,
+                          color: kTextButtonColor,
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),

@@ -11,7 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:notizapp/presentation/components/sign_button.dart';
 import 'package:notizapp/presentation/components/textfield.dart';
-import 'package:notizapp/presentation/components/utils.dart';
+import 'package:notizapp/business_logic/helpers/utils.dart';
 
 import '../../../business_logic/cubits/theme_cubit/theme_cubit.dart';
 import '../../../business_logic/helpers/constants.dart';
@@ -63,6 +63,7 @@ class RegistrationWidget extends StatelessWidget {
       }
     } on FirebaseAuthException catch (e) {
       Utils.showSnackbar('User already exists');
+      log(e.toString());
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
@@ -105,7 +106,7 @@ class RegistrationWidget extends StatelessWidget {
                   ),
                   TextfieldComponent(
                     autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                    validator: (name) => name != null && name.length < 3 ? 'Enter a valid name' : null,
+                    validator: (name) => Utils.validateName(name),
                     textEditingController: _nameTextController,
                     hintext: 'Name',
                     obscureText: false,
@@ -117,8 +118,7 @@ class RegistrationWidget extends StatelessWidget {
                   // email textfield
                   TextfieldComponent(
                     autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                    validator: (email) =>
-                        email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
+                    validator: (email) => Utils.validateEmail(email),
                     textEditingController: _emailTextController,
                     hintext: 'Email',
                     obscureText: false,
@@ -131,7 +131,7 @@ class RegistrationWidget extends StatelessWidget {
                   // password textfield
                   TextfieldComponent(
                     autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                    validator: (password) => password != null && password.length < 6 ? 'Enter min. 6 characters' : null,
+                    validator: (password) => Utils.validatePassword(password),
                     textEditingController: _passwordTextController,
                     hintext: 'Password',
                     obscureText: true,
@@ -153,6 +153,7 @@ class RegistrationWidget extends StatelessWidget {
 
                   // register button
                   RichText(
+                    textAlign: TextAlign.center,
                     text: TextSpan(
                       children: [
                         const TextSpan(
@@ -163,10 +164,11 @@ class RegistrationWidget extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: 'Sign in',
+                          text: '\nSign in',
                           style: const TextStyle(
-                            color: Colors.blue,
+                            color: kTextButtonColor,
                             fontSize: 16,
+                            height: 1.8,
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {

@@ -27,5 +27,7 @@ enum Month {
 }
 
 //const kBackgroundColor = Color(0xffFFFFFF);
-const kBackgroundColorDark = Color.fromARGB(255, 39, 39, 39);
+const kBackgroundColorDark = Color(0xff272727);
 const kBackgroundColorLight = Color(0xffF5F5F5);
+
+const kTextButtonColor = Color(0xff85F4FF);

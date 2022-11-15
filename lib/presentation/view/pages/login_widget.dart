@@ -5,11 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:notizapp/business_logic/helpers/constants.dart';
 import 'package:notizapp/main.dart';
 
 import '../../components/sign_button.dart';
 import '../../components/textfield.dart';
-import '../../components/utils.dart';
+import '../../../business_logic/helpers/utils.dart';
 
 class LoginWidget extends StatelessWidget {
   LoginWidget({super.key, required this.onClickedSignUp, required this.onClickedForgotPassword});
@@ -36,6 +37,7 @@ class LoginWidget extends StatelessWidget {
         password: _passwordTextController.text,
       );
     } on FirebaseAuthException catch (e) {
+      Utils.showSnackbar('${e.message}');
       log(e.toString());
     }
 
@@ -76,12 +78,14 @@ class LoginWidget extends StatelessWidget {
                 ),
                 // email textfield
                 TextfieldComponent(
-                  validator: (email) => email != null && !EmailValidator.validate(email) ? 'Enter a valid email' : null,
+                  validator: (email) => Utils.validateEmail(email),
                   autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                   textEditingController: _emailTextController,
                   hintext: 'Email',
                   obscureText: false,
-                  icon: const Icon(Icons.mail),
+                  icon: const Icon(
+                    Icons.mail,
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -89,21 +93,32 @@ class LoginWidget extends StatelessWidget {
 
                 // password textfield
                 TextfieldComponent(
-                  validator: (password) => password != null && password.length < 6 ? 'Enter min. 6 characters' : null,
+                  validator: (password) => Utils.validatePassword(password),
                   autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                   textEditingController: _passwordTextController,
                   hintext: 'Password',
                   obscureText: true,
-                  icon: const Icon(Icons.security),
+                  icon: const Icon(
+                    Icons.security,
+                  ),
                 ),
-                const SizedBox(
-                  height: 25,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 25),
+                      child: TextButton(
+                          onPressed: onClickedForgotPassword,
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(color: kTextButtonColor),
+                          )),
+                    ),
+                  ],
                 ),
 
-                //sign in button
-
                 const SizedBox(
-                  height: 20,
+                  height: 18,
                 ),
 
                 // register button
@@ -129,24 +144,12 @@ class LoginWidget extends StatelessWidget {
                       TextSpan(
                         text: 'Sign up',
                         style: const TextStyle(
-                          color: Colors.blue,
+                          color: kTextButtonColor,
                           fontSize: 16,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             onClickedSignUp();
-                          },
-                      ),
-                      TextSpan(
-                        text: '\nForgot Password?',
-                        style: const TextStyle(
-                          color: Colors.blue,
-                          height: 1.8,
-                          fontSize: 16,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            onClickedForgotPassword();
                           },
                       ),
                     ],

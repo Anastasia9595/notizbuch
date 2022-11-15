@@ -8,9 +8,9 @@ class SignButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: Colors.amber,
           borderRadius: BorderRadius.circular(30),
@@ -20,7 +20,11 @@ class SignButton extends StatelessWidget {
               onPressed: () => onPressedFunction(),
               child: Text(
                 buttonName,
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               )),
         ),
       ),
