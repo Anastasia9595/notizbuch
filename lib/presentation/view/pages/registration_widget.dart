@@ -13,6 +13,7 @@ import 'package:notizapp/presentation/components/sign_button.dart';
 import 'package:notizapp/presentation/components/textfield.dart';
 import 'package:notizapp/business_logic/helpers/utils.dart';
 
+import '../../../business_logic/cubits/obscure_cubit/obscure_cubit.dart';
 import '../../../business_logic/cubits/theme_cubit/theme_cubit.dart';
 import '../../../business_logic/helpers/constants.dart';
 import '../../../main.dart';
@@ -105,6 +106,7 @@ class RegistrationWidget extends StatelessWidget {
                     height: 50,
                   ),
                   TextfieldComponent(
+                    suffixIcon: null,
                     autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                     validator: (name) => Utils.validateName(name),
                     textEditingController: _nameTextController,
@@ -117,6 +119,7 @@ class RegistrationWidget extends StatelessWidget {
                   ),
                   // email textfield
                   TextfieldComponent(
+                    suffixIcon: null,
                     autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                     validator: (email) => Utils.validateEmail(email),
                     textEditingController: _emailTextController,
@@ -129,13 +132,28 @@ class RegistrationWidget extends StatelessWidget {
                   ),
 
                   // password textfield
-                  TextfieldComponent(
-                    autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                    validator: (password) => Utils.validatePassword(password),
-                    textEditingController: _passwordTextController,
-                    hintext: 'Password',
-                    obscureText: true,
-                    icon: const Icon(Icons.security),
+                  BlocBuilder<ObscureCubit, ObscureState>(
+                    builder: (context, state) {
+                      return TextfieldComponent(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            state.obscureText ? Icons.visibility_off : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            context.read<ObscureCubit>().toggleObscure();
+                          },
+                        ),
+                        validator: (password) => Utils.validatePassword(password),
+                        autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                        textEditingController: _passwordTextController,
+                        hintext: 'Password',
+                        obscureText: state.obscureText,
+                        icon: const Icon(
+                          Icons.security,
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(
                     height: 25,

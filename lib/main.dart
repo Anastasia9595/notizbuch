@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:notizapp/business_logic/cubits/obscure_cubit/obscure_cubit.dart';
 import 'package:notizapp/business_logic/helpers/utils.dart';
 import 'package:notizapp/presentation/view/pages/login.dart';
 
@@ -54,6 +55,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<FavoritesCubit>(
           create: ((context) => FavoritesCubit()),
+        ),
+        BlocProvider<ObscureCubit>(
+          create: ((context) => ObscureCubit()),
         ),
       ],
       child: Builder(builder: (context) {

@@ -10,6 +10,7 @@ class TextfieldComponent extends StatelessWidget {
     required this.textEditingController,
     required this.validator,
     this.showErrorMessage = false,
+    required this.suffixIcon,
   });
   final String hintext;
   final AutovalidateMode autovalidateMode;
@@ -18,6 +19,7 @@ class TextfieldComponent extends StatelessWidget {
   final TextEditingController textEditingController;
   final String? Function(String?)? validator;
   final bool showErrorMessage;
+  final IconButton? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class TextfieldComponent extends StatelessWidget {
                 hintText: hintext,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 prefixIcon: icon,
+                suffixIcon: suffixIcon,
               ),
             ),
           ),

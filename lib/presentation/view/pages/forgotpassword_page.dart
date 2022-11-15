@@ -67,6 +67,7 @@ class ResetPasswordPage extends StatelessWidget {
                 ),
                 // email textfield
                 TextfieldComponent(
+                  suffixIcon: null,
                   autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                   validator: (email) => Utils.validateEmail(email),
                   textEditingController: _emailTextController,

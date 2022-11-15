@@ -4,7 +4,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:notizapp/business_logic/cubits/obscure_cubit/obscure_cubit.dart';
 import 'package:notizapp/business_logic/helpers/constants.dart';
 import 'package:notizapp/main.dart';
 
@@ -78,6 +80,7 @@ class LoginWidget extends StatelessWidget {
                 ),
                 // email textfield
                 TextfieldComponent(
+                  suffixIcon: null,
                   validator: (email) => Utils.validateEmail(email),
                   autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
                   textEditingController: _emailTextController,
@@ -92,15 +95,28 @@ class LoginWidget extends StatelessWidget {
                 ),
 
                 // password textfield
-                TextfieldComponent(
-                  validator: (password) => Utils.validatePassword(password),
-                  autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                  textEditingController: _passwordTextController,
-                  hintext: 'Password',
-                  obscureText: true,
-                  icon: const Icon(
-                    Icons.security,
-                  ),
+                BlocBuilder<ObscureCubit, ObscureState>(
+                  builder: (context, state) {
+                    return TextfieldComponent(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          state.obscureText ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          context.read<ObscureCubit>().toggleObscure();
+                        },
+                      ),
+                      validator: (password) => Utils.validatePassword(password),
+                      autovalidateMode: isValid ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                      textEditingController: _passwordTextController,
+                      hintext: 'Password',
+                      obscureText: state.obscureText,
+                      icon: const Icon(
+                        Icons.security,
+                      ),
+                    );
+                  },
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
