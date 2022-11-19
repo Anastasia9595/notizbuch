@@ -55,7 +55,7 @@ class NoteCard extends StatelessWidget {
                       ]
                     : [
                         BoxShadow(
-                          offset: Offset(4, 4),
+                          offset: const Offset(4, 4),
                           blurRadius: 8,
                           color: Colors.black.withOpacity(0.8),
                         ),
@@ -119,7 +119,7 @@ class NoteCard extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 20, left: 10),
                             child: Text(
                               deltaTitleToString(note.title),
-                              style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),

@@ -35,10 +35,10 @@ class AllNotesPage extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: ((BuildContext context) => const ResponsiveLayout(
+                builder: ((BuildContext context) => ResponsiveLayout(
                       mobileScaffold: MobileScreen(),
-                      tabletScaffold: TabletScreen(),
-                      desktopScaffold: DesktopScreen(),
+                      tabletScaffold: const TabletScreen(),
+                      desktopScaffold: const DesktopScreen(),
                     )),
               ),
             );

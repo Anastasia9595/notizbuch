@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notizapp/business_logic/cubits/login_cubit/login_cubit.dart';
+import 'package:notizapp/business_logic/cubits/login_cubit/login_state.dart';
 
 import 'package:notizapp/presentation/components/navigationdrawer.dart';
 import 'package:notizapp/presentation/components/header_mobile.dart';
@@ -14,19 +19,51 @@ import '../../../../business_logic/helpers/constants.dart';
 import '../../../../business_logic/helpers/functions.dart';
 
 class MobileScreen extends StatefulWidget {
-  const MobileScreen({super.key});
+  MobileScreen({super.key});
 
   @override
   State<MobileScreen> createState() => _MobileScreenState();
 }
 
 class _MobileScreenState extends State<MobileScreen> {
+  void signOut(BuildContext context) {
+    context.read<LoginCubit>().signOut();
+  }
+
+  String userNames = '';
+
   User? user = FirebaseAuth.instance.currentUser;
+
+  Future<void> _fetchData() async {
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    if (firebaseUser != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user?.uid).get().then((value) {
+        userNames = value.data()!['name'];
+      }).catchError((e) {
+        log(e);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    User? user = FirebaseAuth.instance.currentUser;
+    super.initState();
+    if (user != null) {
+      log(user.uid.toString());
+    } else {
+      log('user is null');
+    }
+
+    _fetchData();
+  }
 
   ScrollController controller = ScrollController();
 
   bool closeTopContainer = false;
+
   double topContainer = 0;
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -46,7 +83,7 @@ class _MobileScreenState extends State<MobileScreen> {
             iconTheme: const IconThemeData(color: kBackgroundColorLight),
             actions: [
               IconButton(
-                onPressed: () => FirebaseAuth.instance.signOut(),
+                onPressed: () => signOut(context),
                 icon: const Icon(
                   Icons.arrow_circle_left,
                   size: 30,
@@ -61,16 +98,29 @@ class _MobileScreenState extends State<MobileScreen> {
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: const EdgeInsets.only(left: 15, bottom: 15),
               centerTitle: false,
-              title: RichText(
-                text: TextSpan(
-                  text: 'Hello ${user!.email}',
-                  style: const TextStyle(color: Colors.white, fontSize: 25),
-                  children: [
-                    TextSpan(
-                        text: '\n${DateTime.now().day}. ${capitalize(Month.values[DateTime.now().month - 2].name)}',
-                        style: const TextStyle(color: Colors.white, fontSize: 20))
-                  ],
-                ),
+              title: BlocBuilder<LoginCubit, LoginState>(
+                builder: (context, state) {
+                  return FutureBuilder(
+                    future: _fetchData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return RichText(
+                          text: TextSpan(
+                            text: 'Hello ${userNames.toString()}',
+                            style: const TextStyle(color: Colors.white, fontSize: 25),
+                            children: [
+                              TextSpan(
+                                  text:
+                                      '\n${DateTime.now().day}. ${capitalize(Month.values[DateTime.now().month - 2].name)}',
+                                  style: const TextStyle(color: Colors.white, fontSize: 20))
+                            ],
+                          ),
+                        );
+                      }
+                      return const Text('Loading...');
+                    },
+                  );
+                },
               ),
               background: Image.asset(
                 "assets/background.jpg",

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:notizapp/presentation/view/screens/responsive_layout.dart';
 import 'package:notizapp/presentation/view/screens/responsive_screens/desktop_screen.dart';
 import 'package:notizapp/presentation/view/screens/responsive_screens/mobile_screen.dart';
@@ -20,10 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
+          builder: (context) => ResponsiveLayout(
             mobileScaffold: MobileScreen(),
-            tabletScaffold: TabletScreen(),
-            desktopScaffold: DesktopScreen(),
+            tabletScaffold: const TabletScreen(),
+            desktopScaffold: const DesktopScreen(),
           ),
         ),
       );
@@ -33,11 +31,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.amber,
       body: Stack(
-        children: [],
+        children: const [],
       ),
     );
   }

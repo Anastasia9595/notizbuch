@@ -2,9 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:notizapp/business_logic/blocs/bloc/authentication_bloc.dart';
+import 'package:notizapp/business_logic/cubits/login_cubit/login_cubit.dart';
 import 'package:notizapp/business_logic/cubits/obscure_cubit/obscure_cubit.dart';
 import 'package:notizapp/business_logic/helpers/utils.dart';
-import 'package:notizapp/presentation/view/pages/login.dart';
+import 'package:notizapp/business_logic/repository/auth_repository.dart';
+import 'package:notizapp/presentation/view/pages/login_screen.dart';
 
 import 'package:path_provider/path_provider.dart';
 
@@ -24,8 +27,11 @@ void main() async {
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
+  final authRepository = AuthRepository();
   HydratedBlocOverrides.runZoned(
-    () => runApp(const MyApp()),
+    () => runApp(MyApp(
+      authRepository: authRepository,
+    )),
     storage: storage,
   );
 }
@@ -33,7 +39,7 @@ void main() async {
 final navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key, required AuthRepository authRepository}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +65,19 @@ class MyApp extends StatelessWidget {
         BlocProvider<ObscureCubit>(
           create: ((context) => ObscureCubit()),
         ),
+        BlocProvider<LoginCubit>(
+          create: ((context) => LoginCubit()),
+        ),
+        BlocProvider<AuthBloc>(
+          create: ((context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
+        ),
       ],
       child: Builder(builder: (context) {
         return MaterialApp(
           scaffoldMessengerKey: Utils.messengerKey,
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
-          home: const LoginPage(),
+          home: const LoginScreen(),
         );
       }),
     );

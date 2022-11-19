@@ -1,29 +1,30 @@
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
-  final int id;
-  final String name;
-  final String email;
-  final String password;
+  final String id;
+  final String? name;
+  final String? email;
 
   const User({
     required this.id,
     required this.email,
     required this.name,
-    required this.password,
   });
 
+  static const empty = User(id: '', email: '', name: '');
+
+  bool get isEmpty => this == User.empty;
+  bool get isNotEmpty => this != User.empty;
+
   User copyWith({
-    int? id,
+    String? id,
     String? name,
     String? email,
-    String? password,
   }) {
     return User(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
-      password: password ?? this.password,
     );
   }
 
@@ -32,7 +33,6 @@ class User extends Equatable {
       'id': id,
       'name': name,
       'email': email,
-      'password': password,
     };
   }
 
@@ -41,10 +41,9 @@ class User extends Equatable {
       id: map['id'],
       name: map['name'],
       email: map['email'],
-      password: map['password'],
     );
   }
 
   @override
-  List<Object?> get props => [id, name, email, password];
+  List<Object?> get props => [id, name, email];
 }

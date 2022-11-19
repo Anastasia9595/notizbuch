@@ -23,7 +23,7 @@ class CustomFormField extends StatelessWidget {
               state.errorText != null
                   ? Text(
                       errorText,
-                      style: TextStyle(color: Colors.red, fontSize: 12),
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
                     )
                   : Container(),
             ],

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -49,16 +48,21 @@ class RegistrationWidget extends StatelessWidget {
             ));
     try {
       //create User
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailTextController.text.trim(),
         password: _passwordTextController.text.trim(),
       );
       // add user details
       try {
-        await FirebaseFirestore.instance.collection('users').add({
-          'email': _emailTextController.text.trim(),
+        final docUser = FirebaseFirestore.instance.collection('users').doc(user.user!.uid);
+        await docUser.set({
           'name': _nameTextController.text.trim(),
+          'email': _emailTextController.text.trim(),
         });
+        // await FirebaseFirestore.instance.collection('users').add({
+        //   'email': _emailTextController.text.trim(),
+        //   'name': _nameTextController.text.trim(),
+        // });
       } catch (e) {
         log(e.toString());
       }
@@ -236,7 +240,7 @@ class RegistrationWidget extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        child: Container(
+                        child: SizedBox(
                           height: 35,
                           width: 35,
                           child: SvgPicture.asset('assets/github.svg'),

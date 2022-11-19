@@ -1,27 +1,44 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'package:notizapp/business_logic/cubits/login_cubit/login_cubit.dart';
 import 'package:notizapp/business_logic/cubits/obscure_cubit/obscure_cubit.dart';
 import 'package:notizapp/business_logic/helpers/constants.dart';
-import 'package:notizapp/main.dart';
 
+import '../../../business_logic/helpers/utils.dart';
+import '../../../main.dart';
 import '../../components/sign_button.dart';
 import '../../components/textfield.dart';
-import '../../../business_logic/helpers/utils.dart';
 
 class LoginWidget extends StatelessWidget {
-  LoginWidget({super.key, required this.onClickedSignUp, required this.onClickedForgotPassword});
+  LoginWidget({
+    Key? key,
+    required this.onClickedSignUp,
+    required this.onClickedForgotPassword,
+  }) : super(key: key);
   final formKey = GlobalKey<FormState>();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
   final VoidCallback onClickedSignUp;
   final VoidCallback onClickedForgotPassword;
   bool isValid = false;
+
+  void _signInWithEmailAndPassword(BuildContext context) {
+    if (formKey.currentState!.validate()) {
+      showDialog(
+          context: context,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+      context.read<LoginCubit>().logInWithCredentials(_emailTextController.text, _passwordTextController.text);
+    }
+  }
 
   Future signIn(BuildContext context) async {
     isValid = formKey.currentState!.validate();
@@ -139,7 +156,7 @@ class LoginWidget extends StatelessWidget {
 
                 // register button
                 SignButton(
-                  onPressedFunction: () => signIn(context),
+                  onPressedFunction: () => _signInWithEmailAndPassword(context),
                   buttonName: 'Sign in',
                 ),
                 const SizedBox(
@@ -212,7 +229,7 @@ class LoginWidget extends StatelessWidget {
                       ),
                     ),
                     InkWell(
-                      child: Container(
+                      child: SizedBox(
                         height: 35,
                         width: 35,
                         child: SvgPicture.asset('assets/github.svg'),
