@@ -5,6 +5,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:notizapp/business_logic/blocs/bloc/authentication_bloc.dart';
 import 'package:notizapp/business_logic/cubits/login_cubit/login_cubit.dart';
 import 'package:notizapp/business_logic/cubits/obscure_cubit/obscure_cubit.dart';
+import 'package:notizapp/business_logic/cubits/signup_cubit/signup_cubit.dart';
 import 'package:notizapp/business_logic/helpers/utils.dart';
 import 'package:notizapp/business_logic/repository/auth_repository.dart';
 import 'package:notizapp/presentation/view/pages/login_screen.dart';
@@ -66,10 +67,10 @@ class MyApp extends StatelessWidget {
           create: ((context) => ObscureCubit()),
         ),
         BlocProvider<LoginCubit>(
-          create: ((context) => LoginCubit()),
+          create: ((context) => LoginCubit(AuthRepository())),
         ),
-        BlocProvider<AuthBloc>(
-          create: ((context) => AuthBloc(authRepository: RepositoryProvider.of<AuthRepository>(context))),
+        BlocProvider<SignupCubit>(
+          create: ((context) => SignupCubit(AuthRepository())),
         ),
       ],
       child: Builder(builder: (context) {

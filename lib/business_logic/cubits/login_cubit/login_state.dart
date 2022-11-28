@@ -18,14 +18,15 @@ class LoginState extends Equatable {
     required this.status,
   });
 
-  // factory LoginState.initial() {
-  //   return const LoginState(
-  //     email: '',
-  //     password: '',
-  //      user: User(),
-  //     status: LoginStatus.update,
-  //   );
-  // }
+  factory LoginState.initial() {
+    return const LoginState(
+      email: '',
+      password: '',
+      user: User.empty,
+      status: LoginStatus.update,
+      name: '',
+    );
+  }
 
   @override
   List<Object> get props => [email, password, status, user, name];

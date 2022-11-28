@@ -36,7 +36,9 @@ class LoginWidget extends StatelessWidget {
           builder: (context) => const Center(
                 child: CircularProgressIndicator(),
               ));
-      context.read<LoginCubit>().logInWithCredentials(_emailTextController.text, _passwordTextController.text);
+      context
+          .read<LoginCubit>()
+          .logInWithCredentials(_emailTextController.text.trim(), _passwordTextController.text.trim());
     }
   }
 

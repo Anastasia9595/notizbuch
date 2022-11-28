@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notizapp/business_logic/cubits/login_cubit/login_cubit.dart';
 import 'package:notizapp/business_logic/cubits/login_cubit/login_state.dart';
+import 'package:notizapp/business_logic/cubits/signup_cubit/signup_cubit.dart';
 
 import 'package:notizapp/presentation/components/navigationdrawer.dart';
 import 'package:notizapp/presentation/components/header_mobile.dart';
@@ -17,6 +18,7 @@ import '../../../../business_logic/cubits/notes_cubit/notes_cubit.dart';
 import '../../../../business_logic/cubits/theme_cubit/theme_cubit.dart';
 import '../../../../business_logic/helpers/constants.dart';
 import '../../../../business_logic/helpers/functions.dart';
+import '../../pages/login_screen.dart';
 
 class MobileScreen extends StatefulWidget {
   MobileScreen({super.key});
@@ -26,34 +28,30 @@ class MobileScreen extends StatefulWidget {
 }
 
 class _MobileScreenState extends State<MobileScreen> {
-  void signOut(BuildContext context) {
-    context.read<LoginCubit>().signOut();
-  }
-
   String userNames = '';
 
   User? user = FirebaseAuth.instance.currentUser;
 
-  Future<void> _fetchData() async {
-    final firebaseUser = FirebaseAuth.instance.currentUser;
-    if (firebaseUser != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user?.uid).get().then((value) {
-        userNames = value.data()!['name'];
-      }).catchError((e) {
-        log(e);
-      });
+  Future<String?> _fetchData() async {
+    // final firebaseUser = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance.collection('users').doc(user?.uid).get().then((value) {
+          userNames = value.data()!['name'];
+          return userNames;
+        }).catchError((e) {
+          log(e);
+        });
+      } catch (e) {
+        log(e.toString());
+      }
     }
+    return null;
   }
 
   @override
   void initState() {
-    User? user = FirebaseAuth.instance.currentUser;
     super.initState();
-    if (user != null) {
-      log(user.uid.toString());
-    } else {
-      log('user is null');
-    }
 
     _fetchData();
   }
@@ -83,7 +81,15 @@ class _MobileScreenState extends State<MobileScreen> {
             iconTheme: const IconThemeData(color: kBackgroundColorLight),
             actions: [
               IconButton(
-                onPressed: () => signOut(context),
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                  );
+                  context.read<LoginCubit>().signOut();
+                  //context.read<SignupCubit>().signOut();
+                },
                 icon: const Icon(
                   Icons.arrow_circle_left,
                   size: 30,

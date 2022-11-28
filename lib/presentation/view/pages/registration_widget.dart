@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:notizapp/business_logic/cubits/signup_cubit/signup_cubit.dart';
 
 import 'package:notizapp/presentation/components/sign_button.dart';
 import 'package:notizapp/presentation/components/textfield.dart';
@@ -27,13 +28,18 @@ class RegistrationWidget extends StatelessWidget {
   final VoidCallback onClickedSignUp;
   bool isValid = false;
 
-  Future addUserDetails(String name, String email) async {
-    await FirebaseFirestore.instance.collection('users').add(
-      {
-        'name': name,
-        'email': email,
-      },
-    );
+  void _signUpwitEmailandPassword(BuildContext context) {
+    if (formKey.currentState!.validate()) {
+      showDialog(
+          context: context,
+          builder: (context) => const Center(
+                child: CircularProgressIndicator(),
+              ));
+      context.read<SignupCubit>().signUpWithCredentials(_emailTextController.text.trim(),
+          _passwordTextController.text.trim(), _nameTextController.text.trim(), context);
+      // Future.delayed(Duration(seconds: 2));
+      // context.read<SignupCubit>().addUserToDatabase(_nameTextController.text.trim(), _emailTextController.text.trim());
+    }
   }
 
   Future signUp(BuildContext context) async {
@@ -59,10 +65,6 @@ class RegistrationWidget extends StatelessWidget {
           'name': _nameTextController.text.trim(),
           'email': _emailTextController.text.trim(),
         });
-        // await FirebaseFirestore.instance.collection('users').add({
-        //   'email': _emailTextController.text.trim(),
-        //   'name': _nameTextController.text.trim(),
-        // });
       } catch (e) {
         log(e.toString());
       }
@@ -165,7 +167,13 @@ class RegistrationWidget extends StatelessWidget {
 
                   //sign in button
                   SignButton(
-                    onPressedFunction: () => signUp(context),
+                    onPressedFunction: () {
+                      // _signUpwitEmailandPassword(context);
+                      context.read<SignupCubit>().signUpWithCredentials(_emailTextController.text.trim(),
+                          _passwordTextController.text.trim(), _nameTextController.text.trim(), context);
+                      // context.read<SignupCubit>().addUserToDatabase(
+                      //     _nameTextController.text.trim(), _emailTextController.text.trim(), context);
+                    },
                     buttonName: 'Sign up',
                   ),
 

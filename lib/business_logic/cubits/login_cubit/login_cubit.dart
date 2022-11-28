@@ -1,22 +1,16 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/model/user.dart' as user;
-
+import '../../repository/auth_repository.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit()
+  final AuthRepository _authRepository;
+  LoginCubit(this._authRepository)
       : super(
-          const LoginState(
-              email: '',
-              password: '',
-              status: LoginStatus.update,
-              user: user.User(email: '', name: '', id: ''),
-              name: ''),
+          LoginState.initial(),
         );
 
   void emailChanged(String value, User user) {
@@ -30,10 +24,9 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   // Get the current user from firebase
-  void getCurrentUser(int id) async {
-    final currentUser = FirebaseFirestore.instance.collection('users').where('id', isEqualTo: id).snapshots();
-
-    // emit(state.copyWith(user: cu, status: LoginStatus.update));
+  void getCurrentUserName(int id) async {
+    final name = await _authRepository.fetchData('name');
+    emit(state.copyWith(name: name ?? ''));
   }
 
   // set currentUser
@@ -55,10 +48,7 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> logInWithCredentials(String email, String password) async {
     emit(state.copyWith(status: LoginStatus.loading));
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      await _authRepository.signIn(email: email, password: password);
 
       emit(state.copyWith(status: LoginStatus.sucess));
     } catch (e) {
@@ -69,7 +59,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> signOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
+      await _authRepository.signOut();
       emit(state.copyWith(status: LoginStatus.signedOut));
     } catch (e) {
       log(e.toString());
