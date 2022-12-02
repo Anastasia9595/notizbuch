@@ -6,11 +6,11 @@ import 'package:notizapp/data/model/note.dart';
 part 'trash_notes_state.dart';
 
 class TrashNotesCubit extends Cubit<TrashNotesState> with HydratedMixin {
-  TrashNotesCubit() : super(const TrashNotesState(trashNotes: [])) {
+  TrashNotesCubit() : super(const TrashNotesState(trashNotes: [], filteredNotes: [])) {
     hydrate();
   }
 
-  void addNoteToArchiveList(Note note) {
+  void addNoteToTrashList(Note note) {
     emit(
       state.copyWith(
         trashNotes: [note, ...state.trashNotes],
@@ -19,10 +19,11 @@ class TrashNotesCubit extends Cubit<TrashNotesState> with HydratedMixin {
   }
 
   // remove note from list
-  void removeNotefromArchiveList(int id) {
+  void removeNotefromTrashList(int id) {
     emit(
       state.copyWith(
         trashNotes: state.trashNotes.where((element) => element.id != id).toList(),
+        filteredNotes: state.filteredNotes.where((element) => element.id != id).toList(),
       ),
     );
   }

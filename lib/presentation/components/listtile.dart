@@ -22,6 +22,7 @@ class ListTileNote extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NotesState notesState = context.watch<NotesCubit>().state;
+
     Note newNote = notesState.notesList.firstWhere((element) => element.id == id);
     NotesCubit notescubit = context.read<NotesCubit>();
     final themeState = context.watch<ThemeCubit>().state.switchValue;

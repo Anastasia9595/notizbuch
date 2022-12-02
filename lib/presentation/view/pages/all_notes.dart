@@ -109,7 +109,8 @@ class AllNotesPage extends StatelessWidget {
                                     Navigator.of(context).pop();
                                   },
                                   () {
-                                    context.read<TrashNotesCubit>().addNoteToArchiveList(notesState.notesList[index]);
+                                    context.read<TrashNotesCubit>().addNoteToTrashList(notesState.notesList[index]);
+
                                     context.read<NotesCubit>().removeNotefromList(notesState.notesList[index].id);
                                     context
                                         .read<FavoritesCubit>()

@@ -88,7 +88,7 @@ class _MobileScreenState extends State<MobileScreen> {
                     ),
                   );
                   context.read<LoginCubit>().signOut();
-                  //context.read<SignupCubit>().signOut();
+                  context.read<SignupCubit>().signOut();
                 },
                 icon: const Icon(
                   Icons.arrow_circle_left,

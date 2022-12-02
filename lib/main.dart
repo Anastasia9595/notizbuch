@@ -9,6 +9,7 @@ import 'package:notizapp/business_logic/cubits/signup_cubit/signup_cubit.dart';
 import 'package:notizapp/business_logic/helpers/utils.dart';
 import 'package:notizapp/business_logic/repository/auth_repository.dart';
 import 'package:notizapp/presentation/view/pages/login_screen.dart';
+import 'package:notizapp/presentation/view/screens/responsive_screens/mobile_screen.dart';
 
 import 'package:path_provider/path_provider.dart';
 
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
           scaffoldMessengerKey: Utils.messengerKey,
           navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
-          home: const LoginScreen(),
+          home: MobileScreen(),
         );
       }),
     );
