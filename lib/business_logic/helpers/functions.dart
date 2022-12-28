@@ -24,5 +24,5 @@ String dateToString(DateTime date) {
 
 // convert delta title object to string
 String deltaTitleToString(Delta delta) {
-  return delta.toString().replaceAll(RegExp('[^A-Za-z0-9]'), '').replaceAll(RegExp('insert'), '');
+  return delta.toString().replaceAll(RegExp('[^A-Za-z0-9]'), ' ').replaceAll(RegExp('insert'), '');
 }

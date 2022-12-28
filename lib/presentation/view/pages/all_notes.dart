@@ -59,7 +59,7 @@ class AllNotesPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      'Notizen (${state.notesList.length})',
+                      'All Notes (${state.notesList.length})',
                       style: TextStyle(
                         color: themeState ? Colors.black : Colors.white,
                         fontSize: 30,

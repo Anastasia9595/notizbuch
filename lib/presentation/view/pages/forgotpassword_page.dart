@@ -12,7 +12,7 @@ import '../../components/textfield.dart';
 class ResetPasswordPage extends StatelessWidget {
   ResetPasswordPage({super.key, required this.onClickedSignIn});
   final formKey = GlobalKey<FormState>();
-  // final VoidCallback onClickedSignUp;
+
   bool isValid = false;
   final _emailTextController = TextEditingController();
   final VoidCallback onClickedSignIn;

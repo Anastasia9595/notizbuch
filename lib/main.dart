@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:notizapp/business_logic/blocs/bloc/authentication_bloc.dart';
 import 'package:notizapp/business_logic/cubits/login_cubit/login_cubit.dart';
 import 'package:notizapp/business_logic/cubits/obscure_cubit/obscure_cubit.dart';
 import 'package:notizapp/business_logic/cubits/signup_cubit/signup_cubit.dart';

@@ -42,6 +42,7 @@ class ListTileNote extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Text(
               deltaTitleToString(newNote.title),
+              maxLines: 1,
               style:
                   TextStyle(fontSize: 20, color: themeState ? Colors.black : Colors.white, fontWeight: FontWeight.bold),
             ),

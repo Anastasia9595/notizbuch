@@ -6,10 +6,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
 
 import 'package:notizapp/business_logic/cubits/login_cubit/login_cubit.dart';
 import 'package:notizapp/business_logic/cubits/obscure_cubit/obscure_cubit.dart';
 import 'package:notizapp/business_logic/helpers/constants.dart';
+import 'package:notizapp/presentation/view/screens/responsive_screens/mobile_screen.dart';
 
 import '../../../business_logic/helpers/utils.dart';
 import '../../../main.dart';
@@ -63,6 +65,25 @@ class LoginWidget extends StatelessWidget {
     }
 
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
+
+  void login(BuildContext context) async {
+    try {
+      Response response = await post(Uri.parse('http://10.0.2.2:8000/api/login'), body: {
+        'email': _emailTextController.text.trim(),
+        'password': _passwordTextController.text.trim(),
+      });
+
+      if (response.statusCode == 201) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => MobileScreen(),
+        ));
+      } else {
+        log('failed');
+      }
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   @override
@@ -158,7 +179,7 @@ class LoginWidget extends StatelessWidget {
 
                 // register button
                 SignButton(
-                  onPressedFunction: () => _signInWithEmailAndPassword(context),
+                  onPressedFunction: () => login(context),
                   buttonName: 'Sign in',
                 ),
                 const SizedBox(
